@@ -19,18 +19,28 @@ function desc2text(desc) {
     for (subfig in desc.structure) {
         textLong = textLong.concat(" Subfigure " + subfig.slice(-1))
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
+        textLong = textLong.concat("\n")
     }
 
     return textLong;
 }
 
 function addTextSubfig(subfig) {
+
+    console.log(typeof(subfig.specialDesc))
+    console.log(typeof(specialDesc) === "undefined")
+
     var textSubfig = "";
 
+    if (subfig.overlayed == true) {
+        textSubfig = textSubfig.concat(" is an overlayed plot. Gosling's automatic text generation currently doesn't support overlayed plots.")
+        return textSubfig
+    }
+
     if (typeof subfig.specialDesc !== "undefined") {
-        textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
-    } else {
         textSubfig = textSubfig.concat(" shows a " + subfig.specialDesc + ".")
+    } else {
+        textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
     }
 
     for (axis in subfig.axes) {

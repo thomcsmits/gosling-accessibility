@@ -67,10 +67,15 @@ function gos2desc(spec) {
 
 
 function traverseTracks(specPart, savedAttributes, desc){
+    if ('alignment' in specPart && specPart.alignment === 'overlay') {
+        desc.structure['subfig' + countTracks] = describeSubfigOverlayed(specPart, countTracks, savedAttributes);
+        countTracks ++; 
+        return;
+    }
     if ('tracks' in specPart) { 
         savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc)
         specPart.tracks.forEach((track) => {       
-            desc.structure['subfig' + countTracks] = describeSubfig(track, savedAttributes, savedAttributes);
+            desc.structure['subfig' + countTracks] = describeSubfig(track, countTracks, savedAttributes);
             countTracks ++;
         });
     }
@@ -118,6 +123,7 @@ function updateSavedAttributes(view, savedAttributes, desc) {
 function describeSubfig(track, countTracks, savedAttributes) {
     subfig = new Object()
     subfig.number = countTracks
+    subfig.overlayed = false
     subfig.assembly = savedAttributes.assembly
     subfig.layout = savedAttributes.layout
     subfig.mark = track.mark
@@ -141,12 +147,21 @@ function describeSubfig(track, countTracks, savedAttributes) {
 }
 
 
+function describeSubfigOverlayed(track, countTracks, savedAttributes) {
+    subfig = new Object()
+    subfig.number = countTracks
+    subfig.overlayed = true
+
+    return subfig
+}
+
+
 function determineSpecialCases(track, subfig) {
     if (track.mark === "point" && track.x.type === "quantitative" & track.y.type === "quantitative") {
         subfig.specialDesc = "scatter plot"
     }
-
 }
+
 
 module.exports = {
     gos2desc: gos2desc
