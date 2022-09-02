@@ -27,9 +27,6 @@ function desc2text(desc) {
 
 function addTextSubfig(subfig) {
 
-    console.log(typeof(subfig.specialDesc))
-    console.log(typeof(specialDesc) === "undefined")
-
     var textSubfig = "";
 
     if (subfig.overlayed == true) {
