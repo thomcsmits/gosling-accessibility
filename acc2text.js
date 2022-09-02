@@ -14,10 +14,17 @@ function desc2text(desc) {
 
     if (desc.nTracks > 1) {
         textLong = textLong.concat(" There are " + desc.nTracks + " subfigures.")
+        textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
+
+        for (subfig in desc.structure) {
+            textLong = textLong.concat(" Subfigure " + subfig.slice(-1))
+            textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
+            textLong = textLong.concat("\n")
+        }
     }
 
-    for (subfig in desc.structure) {
-        textLong = textLong.concat(" Subfigure " + subfig.slice(-1))
+    else {
+        textLong = textLong.concat(" The figure ")
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
         textLong = textLong.concat("\n")
     }
