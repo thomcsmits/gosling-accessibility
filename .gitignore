@@ -1,0 +1,7 @@
+# dependencies
+/node_modules
+
+# misc
+/bin
+.vscode
+.DS_Store
