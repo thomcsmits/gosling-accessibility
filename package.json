@@ -1,0 +1,15 @@
+{
+  "name": "gosling-accessibility",
+  "version": "1.0.0",
+  "description": "Improving accessibility in Gosling by generating automatic textual descriptions",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomcsmits/gosling-accessibility.git"
+  },
+  "author": "Thomas Smits",
+  "homepage": "https://github.com/thomcsmits/gosling-accessibility#readme"
+}
