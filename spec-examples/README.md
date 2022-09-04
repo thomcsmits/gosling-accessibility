@@ -11,7 +11,7 @@ _The alt-text in this markdown file was hand-written._
 ### Visual
 Here is the visual itself:
 
-![Gosling figure displaying three charts with different visual encodings of expression of four samples accross genom](visuals/Example1_visual_encoding.png)
+![Gosling figure displaying three charts with different visual encodings of expression of four samples accross genom](visuals/Example1_visual_encoding.PNG)
 
 **Figure 1:** Example Gosling figure displaying visual encodings
 
@@ -31,7 +31,7 @@ The automatically generated description:
 ### Visual
 Here is the visual itself:
 
-![Gosling figure displaying bar chart of expression accross genome](visuals/Example2_simple_bar.png)
+![Gosling figure displaying bar chart of expression accross genome](visuals/Example2_simple_bar.PNG)
 
 **Figure 2:** Example Gosling figure displaying bar chart
 
@@ -50,7 +50,7 @@ The automatically generated description:
 ### Visual
 Here is the visual itself:
 
-![Gosling figure displaying ideogram](visuals/Example3_simple_ideogram.png)
+![Gosling figure displaying ideogram](visuals/Example3_simple_ideogram.PNG)
 
 **Figure 3:** Example Gosling figure displaying ideogram
 
@@ -69,7 +69,7 @@ The automatically generated description:
 ### Visual
 Here is the visual itself:
 
-![Gosling figure displaying bar chart of expression accross genome with horizontal and vertical annotations](visuals/Example4_rule_mark.png)
+![Gosling figure displaying bar chart of expression accross genome with horizontal and vertical annotations](visuals/Example4_rule_mark.PNG)
 
 **Figure 4:** Example Gosling figure displaying bar chart with annotations
 
