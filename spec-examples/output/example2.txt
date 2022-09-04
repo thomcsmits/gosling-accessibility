@@ -1,0 +1,1 @@
+Long description: Gosling figure with title: 'Basic Marks: bar'. The subtitle reads: 'Tutorial Examples'. The figure shows a plot marked with bar. The genomic field 'start' is shown on the x-axis. The genomic field 'end' is shown on the xe-axis. The quantitative field 'peak' is shown on the y-axis.

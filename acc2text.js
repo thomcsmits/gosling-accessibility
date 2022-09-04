@@ -2,7 +2,7 @@ function desc2text(desc) {
     var textShort = "Alt: "
     var textLong = "Long description:"
 
-    if (typeof desc.titel !== 'undefined') {
+    if (typeof desc.title !== 'undefined') {
         textLong = textLong.concat(" Gosling figure with title: '" + desc.title + "'.")
     } else {
         textLong = textLong.concat(" Gosling figure without title.")
@@ -14,7 +14,6 @@ function desc2text(desc) {
 
     if (desc.nTracks > 1) {
         textLong = textLong.concat(" There are " + desc.nTracks + " subfigures.")
-        textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
 
         for (subfig in desc.structure) {
             textLong = textLong.concat(" Subfigure " + subfig.slice(-1))
@@ -24,8 +23,8 @@ function desc2text(desc) {
     }
 
     else {
-        textLong = textLong.concat(" The figure ")
-        textLong = textLong.concat(addTextSubfig(desc.structure[subfig]))
+        textLong = textLong.concat(" The figure")
+        textLong = textLong.concat(addTextSubfig(desc.structure.subfig0))
         textLong = textLong.concat("\n")
     }
 
