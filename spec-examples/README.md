@@ -20,8 +20,9 @@ Here is the visual itself:
 The automatically generated description: 
 
 > Long description: Gosling figure with title: 'Visual Encoding'. The subtitle reads: 'Gosling provides diverse visual encoding methods'. There are 3 subfigures. Subfigure 0 shows a plot marked with rect. The genomic field 'start' is shown on the x-axis. The genomic field 'end' is shown on the xe-axis. The nominal field 'sample' is shown on the row-axis. The quantitative field 'peak' is shown on the color-axis.
- Subfigure 1 shows a plot marked with bar. The genomic field 'position' is shown on the x-axis. The quantitative field 'peak' is shown on the y-axis. The nominal field 'sample' is shown on the row-axis. The nominal field 'sample' is shown on the color-axis.
- Subfigure 2 shows a plot marked with line. The genomic field 'position' is shown on the x-axis. The quantitative field 'peak' is shown on the y-axis. The nominal field 'sample' is shown on the row-axis. The nominal field 'sample' is shown on the color-axis.
+ Subfigure 1 shows a bar chart. The genomic field 'position' is shown on the x-axis. The quantitative field 'peak' is shown on the y-axis. The nominal field 'sample' is shown on the row-axis. The nominal field 'sample' is shown on the color-axis.
+ Subfigure 2 shows a line chart. The genomic field 'position' is shown on the x-axis. The quantitative field 'peak' is shown on the y-axis. The nominal field 'sample' is shown on the row-axis. The nominal field 'sample' is shown on the color-axis.
+
 
 
 
@@ -39,7 +40,7 @@ Here is the visual itself:
 ### Automatic description
 The automatically generated description: 
 
-> Long description: Gosling figure with title: 'Basic Marks: bar'. The subtitle reads: 'Tutorial Examples'. The figure shows a plot marked with bar. The genomic field 'start' is shown on the x-axis. The genomic field 'end' is shown on the xe-axis. The quantitative field 'peak' is shown on the y-axis.
+> Long description: Gosling figure with title: 'Basic Marks: bar'. The subtitle reads: 'Tutorial Examples'. The figure shows a bar chart. The genomic field 'start' is shown on the x-axis. The genomic field 'end' is shown on the xe-axis. The quantitative field 'peak' is shown on the y-axis.
 
 
 
@@ -58,7 +59,7 @@ Here is the visual itself:
 ### Automatic description
 The automatically generated description: 
 
-> Long description: Gosling figure with title: 'Basic Marks: Rect'. The subtitle reads: 'Tutorial Examples'. The figure shows a plot marked with rect. The nominal field 'Stain' is shown on the color-axis. The genomic field 'chromStart' is shown on the x-axis. The genomic field 'chromEnd' is shown on the xe-axis.
+> Long description: Gosling figure with title: 'Basic Marks: Rect'. The subtitle reads: 'Tutorial Examples'. The figure shows a ideogram. The nominal field 'Stain' is shown on the color-axis. The genomic field 'chromStart' is shown on the x-axis. The genomic field 'chromEnd' is shown on the xe-axis.
 
 
 
