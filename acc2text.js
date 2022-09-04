@@ -23,7 +23,7 @@ function desc2text(desc) {
     }
 
     else {
-        textLong = textLong.concat(" The figure ")
+        textLong = textLong.concat(" The figure")
         textLong = textLong.concat(addTextSubfig(desc.structure.subfig0))
         textLong = textLong.concat("\n")
     }
