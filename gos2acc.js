@@ -8,32 +8,20 @@ function gos2desc(spec) {
     desc.title = spec.title;
     desc.subtitle = spec.subtitle;
     
-    // assembly
-    if (typeof spec.assembly !== "undefined") { 
-        desc.assembly = spec.assembly; 
-    } else { 
-        desc.assembly = "hg38" // default
-    } 
-
-    // layout
-    if (typeof spec.layout !== "undefined") {
-        desc.layout = spec.layout;
-    } else {
-        desc.layout = "circular" // default
+    // default values
+    const defaultValues = {
+        assembly : "hg38",
+        layout : "linear",
+        arrangement : "vertical",
+        alignment : "stack"        
     }
 
-    // arrangement
-    if (typeof spec.arrangement !== "undefined") {
-        desc.arrangement = spec.arrangement;
-    } else {
-        desc.arrangement = "vertical" // default
-    }
-
-    // alignment
-    if (typeof spec.alignment !== "undefined") {
-        desc.alignment = spec.alignment;
-    } else {
-        desc.alignment = "stack" // default
+    for (val in defaultValues) {
+        if (typeof spec[val] !== "undefined") {
+            desc[val] = spec[val];
+        } else {
+            desc[val] = defaultValues[val];
+        }
     }
 
     // domain
