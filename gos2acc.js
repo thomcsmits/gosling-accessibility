@@ -11,7 +11,9 @@ function gos2desc(spec) {
     // assembly
     if (typeof spec.assembly !== "undefined") { 
         desc.assembly = spec.assembly; 
-    } else { desc.assembly = "hg38" } // default
+    } else { 
+        desc.assembly = "hg38" // default
+    } 
 
     // layout
     if (typeof spec.layout !== "undefined") {
@@ -47,7 +49,8 @@ function gos2desc(spec) {
         "layout" : true,
         "arrangement" : true,
         "alignment" : true,
-        "domain" : true
+        "xDomain" : true,
+        "yDomain" : true
     }
 
     var savedAttributes = {
@@ -72,7 +75,7 @@ function traverseTracks(specPart, savedAttributes, desc){
     if ("alignment" in specPart && specPart.alignment === "overlay") {
         savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
 
-        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes);
+        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
         countTracks ++; 
 
         return;
@@ -89,7 +92,7 @@ function traverseTracks(specPart, savedAttributes, desc){
                     colViews ++;
                 }
             }
-            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes);
+            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc);
             countTracks ++;
         });
         return;
@@ -128,28 +131,15 @@ function traverseTracks(specPart, savedAttributes, desc){
 function updateSavedAttributes(view, savedAttributes, desc) {
     savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
-    if (typeof view.assembly !== "undefined") {
-        savedAttributesCopy.assembly = view.assembly
-        if (savedAttributesCopy.assembly != savedAttributes.assembly) {
-            desc.allSubfiguresSameValue.assembly = false;
-        }
-    }
-    if (typeof view.layout !== "undefined") {
-        savedAttributesCopy.layout = view.layout
-        if (savedAttributesCopy.layout != savedAttributes.layout) {
-            desc.allSubfiguresSameValue.layout = false;
-        }
-    }
-    if (typeof view.arrangement !== "undefined") {
-        savedAttributesCopy.arrangement = view.arrangement
-        if (savedAttributesCopy.arrangement != savedAttributes.arrangement) {
-            desc.allSubfiguresSameValue.arrangement = false;
-        }
-    }
-    if (typeof view.alignment !== "undefined") {
-        savedAttributesCopy.alignment = view.alignment
-        if (savedAttributesCopy.alignment != savedAttributes.alignment) {
-            desc.allSubfiguresSameValue.alignment = false;
+    savedAttributesNames = ["assembly", "layout", "arrangement", "alignment", "xDomain", "yDomain"]
+
+    for (let i = 0; i < savedAttributesNames.length; i++) {
+        attrName = savedAttributesNames[i]
+        if (typeof view[attrName] !== "undefined") {
+            savedAttributesCopy[attrName] = view[attrName];
+            if (savedAttributesCopy[attrName] != savedAttributes[attrName]) {
+                desc.allSubfiguresSameValue[attrName] = false
+            }
         }
     }
 
@@ -157,7 +147,7 @@ function updateSavedAttributes(view, savedAttributes, desc) {
 }
 
 
-function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes) {
+function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc) {
     subfig = new Object();
     subfig.number = countTracks;
     subfig.rowNumber = rowViews;
@@ -182,11 +172,33 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes)
 
     determineSpecialCases(track, subfig)
 
+    if (typeof track.x !== "undefined") {
+        if (typeof track.x.domain !== "undefined") {
+            subfig.xDomain = track.x.domain;
+            if (subfig.xDomain != savedAttributes.xDomain) {
+                desc.allSubfiguresSameValue.xDomain = false;
+            }
+        } else {
+        subfig.xDomain = savedAttributes.xDomain;
+        }
+    }
+    if (typeof track.y !== "undefined") {
+        console.log(track)
+        if (typeof track.y.domain !== "undefined") {
+            subfig.yDomain = track.y.domain;  
+            if (subfig.yDomain != savedAttributes.yDomain) {
+                desc.allSubfiguresSameValue.yDomain = false;
+            }
+        } else {
+        subfig.yDomain = savedAttributes.yDomain;
+        }
+    }
+
     return subfig
 }
 
 
-function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAttributes) {
+function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAttributes, desc) {
     subfig = new Object()
     subfig.number = countTracks
     subfig.rowNumber = rowViews;
