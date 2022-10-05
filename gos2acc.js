@@ -1,7 +1,8 @@
 function gos2desc(spec) {
     var desc = new Object();
     countTracks = 0;
-    countViews = 0;
+    rowViews = 0;
+    colViews = 0;
 
     // general properties
     desc.title = spec.title;
@@ -39,7 +40,6 @@ function gos2desc(spec) {
 
     // layout
     desc.structure = new Object()
-    // desc.arr = new Array()
 
     // saving attributes
     desc.allSubfiguresSameValue = {
@@ -59,76 +59,66 @@ function gos2desc(spec) {
         "yDomain" : desc.yDomain
     }
 
-    traverseTracks(spec, savedAttributes, desc)
-
-
-    // determine arrangement of all plots
-    const arr = [];
-    const root = traverseTracksForArrangement(spec) 
-    arr.push(root);
+    traverseTracks(spec, savedAttributes, desc) 
 
     desc.nTracks = countTracks
     return(desc)
 }
 
 
+
 function traverseTracks(specPart, savedAttributes, desc){
+
     if ("alignment" in specPart && specPart.alignment === "overlay") {
-        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, savedAttributes);
+        savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
+
+        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes);
         countTracks ++; 
+
         return;
     }
+
     if ("tracks" in specPart) { 
-        savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc)
-        specPart.tracks.forEach((track) => {       
-            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, savedAttributes);
+        savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
+
+        specPart.tracks.forEach((track, i) => {      
+            if (i != 0) {
+                if (savedAttributes.arrangement === "vertical") {
+                    rowViews ++;
+                } else {
+                    colViews ++;
+                }
+            }
+            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes);
             countTracks ++;
         });
+        return;
     }
-    else if ("views" in specPart){
-        specPart.views.forEach((view) => {
-            savedAttributesCopy = updateSavedAttributes(view, savedAttributes, desc)
+
+    else if ("views" in specPart) {
+        const currRow = rowViews;
+        const currCol = colViews;
+
+        specPart.views.forEach((view, i) => {
+
+            if (i !== 0) {
+                if (savedAttributes.arrangement === "vertical") {
+                    rowViews ++;
+                } else {
+                    colViews ++;
+                }
+            }
+
+            const savedAttributesCopy = updateSavedAttributes(view, savedAttributes, desc);
+
             traverseTracks(view, savedAttributesCopy, desc);
         });
-    }
-}
 
-
-function traverseTracksForArrangement(specPart) {
-    if ("tracks" in specPart) {
-        return {}; // empty object
-
-    } else if("views" in specPart) {
-        let totalViews = [];
-        let prevArrangement;
-        let curViews = [];
-        
-        specPart.views.forEach((view, i) => {
-            const downstreamInfo = traverseTracksForArrangement(view);
-            const { arrangement: childArrangement, views: childViews } = downstreamInfo;
-
-            if(Object.keys(downstreamInfo).length === 0) {
-                // this means `view` is not containing any child views, so just add this
-                curViews = [...curViews, view];
-            } else if(i === 0 || !prevArrangement) {
-                // we do not yet have a view to compare, so just record this
-                curViews = [...curViews, ...childViews];
-                prevArrangement = childArrangement;
-            } else if(prevArrangement === childArrangement) {
-                // this means current and the previous `view`s uses the same arrangement, so merge them
-                curViews = [...curViews, ...childViews];
-            } else {
-                // this means we encountered a different arrangement, so record the previous views
-                arr.push({ arrnagement: prevArrangement, views: curViews });
-                totalViews = [...totalViews, [...curViews]];
-                curViews = [];
-                prevArrangement = null;
-            }
-        });
-
-        totalViews = [...totalViews, ...curViews];
-
-        return { arrangement: specPart.arrangement, views: totalViews };
+        if (savedAttributes.arrangement === "vertical") {
+            rowViews = currRow;
+        } else {
+            colViews = currCol;
+        }
     }
 }
 
@@ -136,7 +126,7 @@ function traverseTracksForArrangement(specPart) {
 
 
 function updateSavedAttributes(view, savedAttributes, desc) {
-    savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes)) 
+    savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
     if (typeof view.assembly !== "undefined") {
         savedAttributesCopy.assembly = view.assembly
@@ -167,13 +157,15 @@ function updateSavedAttributes(view, savedAttributes, desc) {
 }
 
 
-function describeSubfig(track, countTracks, savedAttributes) {
-    subfig = new Object()
-    subfig.number = countTracks
-    subfig.overlayed = false
-    subfig.assembly = savedAttributes.assembly
-    subfig.layout = savedAttributes.layout
-    subfig.mark = track.mark
+function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes) {
+    subfig = new Object();
+    subfig.number = countTracks;
+    subfig.rowNumber = rowViews;
+    subfig.colNumber = colViews;
+    subfig.overlayed = false;
+    subfig.assembly = savedAttributes.assembly;
+    subfig.layout = savedAttributes.layout;
+    subfig.mark = track.mark;
     subfig.axes = new Object();
 
     const channelOptions = ["x", "xe", "y", "ye", "x1", "x1e", "y1", "y1e", "row", "size", "text", "color", "stroke", "strokeWidth", "opacity"]
@@ -194,10 +186,19 @@ function describeSubfig(track, countTracks, savedAttributes) {
 }
 
 
-function describeSubfigOverlayed(track, countTracks, savedAttributes) {
+function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAttributes) {
     subfig = new Object()
     subfig.number = countTracks
+    subfig.rowNumber = rowViews;
+    subfig.colNumber = colViews;
     subfig.overlayed = true
+
+    subfig.layers = new Object()
+
+    
+
+    // option 1: each overlayed track has its own data
+    // option 2: all from the same data
 
     return subfig
 }
@@ -220,6 +221,12 @@ function determineSpecialCases(track, subfig) {
     try {
         if (track.mark === "bar" && track.x.type === "genomic" & track.y.type === "quantitative") {
             subfig.specialDesc = "bar chart"
+        }
+    } catch (error) {}
+
+    try {
+        if (track.mark === "rect" && track.x.type === "genomic" & track.xe.type === "genomic" & track.color.type === "quantitative") {
+            subfig.specialDesc = "heatmap"
         }
     } catch (error) {}
 
