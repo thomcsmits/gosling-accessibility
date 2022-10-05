@@ -367,7 +367,7 @@ module.exports = {
         "xDomain": {"chromosome": "1", "interval": [1, 3000500]},
         "views": [
           {
-            "arrangement": "horizontal",
+            //"arrangement": "horizontal",
             "views": [
               {
                 "spacing": 2,
@@ -1343,8 +1343,771 @@ module.exports = {
             ]
           }
         ]
+      },
+
+      example7: {
+        "title": "Testing",
+        "arrangement": "vertical",
+        "views": [
+          {
+            //"arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "spacing": 2,
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "alignment": "overlay",
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"]
+                },
+                "x": {"field": "position", "type": "genomic", "axis": "top"},
+                "y": {"field": "peak", "type": "quantitative"},
+                "row": {"field": "sample", "type": "nominal"},
+                "color": {"field": "sample", "type": "nominal", "legend": true},
+                "tracks": [
+                  {"mark": "line"},
+                  {
+                    "mark": "point",
+                    "size": {"field": "peak", "type": "quantitative", "range": [0, 2]}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+               "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+          }
+        ]
+      },
+
+      example8: {
+        "title": "Testing",
+        "arrangement": "vertical",
+        "views": [
+         
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "point",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              // },
+              // {
+              //   "alignment": "overlay",
+              //   "data": {
+              //     "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+              //     "type": "multivec",
+              //     "row": "sample",
+              //     "column": "position",
+              //     "value": "peak",
+              //     "categories": ["sample 1", "sample 2", "sample 3", "sample 4"]
+              //   },
+              //   "x": {"field": "position", "type": "genomic", "axis": "top"},
+              //   "y": {"field": "peak", "type": "quantitative"},
+              //   "row": {"field": "sample", "type": "nominal"},
+              //   "color": {"field": "sample", "type": "nominal", "legend": true},
+              //   "tracks": [
+              //     {"mark": "line"},
+              //     {
+              //       "mark": "point",
+              //       "size": {"field": "peak", "type": "quantitative", "range": [0, 2]}
+              //     }
+              //   ]
+              }
+            ]
+          },
+
+          {
+
+            "tracks": [
+              {
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                  "binSize": 4
+                },
+                "mark": "line",
+                "x": {"field": "start", "type": "genomic", "axis": "top"},
+                "row": {"field": "sample", "type": "nominal", "legend": true}
+              },
+              {
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                  "binSize": 4
+                },
+                "mark": "rect",
+                "x": {"field": "start", "type": "genomic", "axis": "top"},
+                "row": {"field": "sample", "type": "nominal", "legend": true}
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+               "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+          }
+        ]
+      },
+
+      example9: {
+        "title": "Testing",
+        "arrangement": "vertical",
+        "views": [
+         
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "point",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "alignment": "overlay",
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"]
+                },
+                "x": {"field": "position", "type": "genomic", "axis": "top"},
+                "y": {"field": "peak", "type": "quantitative"},
+                "row": {"field": "sample", "type": "nominal"},
+                "color": {"field": "sample", "type": "nominal", "legend": true},
+                "tracks": [
+                  {"mark": "line"},
+                  {
+                    "mark": "point",
+                    "size": {"field": "peak", "type": "quantitative", "range": [0, 2]}
+                  }
+                ]
+              }
+            ]
+          },
+
+          {
+
+            "tracks": [
+              {
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                  "binSize": 4
+                },
+                "mark": "line",
+                "x": {"field": "start", "type": "genomic", "axis": "top"},
+                "row": {"field": "sample", "type": "nominal", "legend": true}
+              },
+              {
+                "data": {
+                  "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                  "type": "multivec",
+                  "row": "sample",
+                  "column": "position",
+                  "value": "peak",
+                  "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                  "binSize": 4
+                },
+                "mark": "rect",
+                "x": {"field": "start", "type": "genomic", "axis": "top"},
+                "row": {"field": "sample", "type": "nominal", "legend": true}
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+               "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+               "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+              
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+           
+            "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              },
+              {
+                "arrangement" : "vertical",
+                "views": [
+                  
+                  {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }]},
+
+                  {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }
+                ]
+              }
+                ]
+              }, 
+              {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }]}
+            ]
+          },
+          {
+                "tracks": [
+                  {
+                    "data": {
+                      "url": "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+                      "type": "multivec",
+                      "row": "sample",
+                      "column": "position",
+                      "value": "peak",
+                      "categories": ["sample 1", "sample 2", "sample 3", "sample 4"],
+                      "binSize": 4
+                    },
+                    "mark": "rect",
+                    "x": {"field": "start", "type": "genomic", "axis": "top"},
+                    "row": {"field": "sample", "type": "nominal", "legend": true}
+                  }]}
+        ]
+      },
+
+      exampleNotValid: {
+        "title": "Testing",
+        "arrangement": "vertical",
+        "views": [
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "point",
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tracks": [
+              {
+                "data": "2",
+                "mark": "line",
+              },
+              {
+                "data": "2",
+                "mark": "rect",
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+               "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              },
+              {
+               "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              }
+              
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              },
+              {
+                "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              }
+            ]
+          },
+          {
+           
+            "tracks": [
+              {
+                "data": "1",
+                "mark": "rect",
+              }
+            ]
+          },
+          {
+            "arrangement": "horizontal",
+            "views": [
+              {
+                "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              },
+              {
+                "arrangement" : "vertical",
+                "views": [
+                  {
+                    "tracks": [
+                      {
+                        "data": "1",
+                        "mark": "rect",
+                      }
+                    ]
+                  },
+                  {
+                    "tracks": [
+                      {
+                        "data": "1",
+                        "mark": "rect",
+                      }
+                    ]
+                  },
+                ]
+              }, 
+              {
+                "tracks": [
+                  {
+                    "data": "1",
+                    "mark": "rect",
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tracks": [
+              {
+                "data": "1",
+                "mark": "rect",
+              }
+            ]
+          }
+        ]
       }
-  
   }
   
   

@@ -12,7 +12,7 @@ console.log(descSpec)
 console.log(textSpec)
 
 
-const updateExampleOutput = true
+const updateExampleOutput = false;
 // if updateExampleOutput is set to true, then the description for examples in the folder 'spec-examples' are written to the the 'output' folder in this folder. 
 
 if (updateExampleOutput) {
