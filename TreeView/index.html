@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="toggle.css">
+</head>
+<body>
+  
+    
+<h1>Testing tree view for Gosling description</h1>
+
+<div id="input" class="column left">
+    <h2>Input JSON</h2>
+    <form id="form" method="post"> 
+        <label for="inputSpec">Spec</label>
+        <textarea id="inputSpec" name="inputSpec" rows="50" cols="50"></textarea>
+        <!-- <input type="submit" value="Submit form"> -->
+    </form>
+
+    <input type="submit" onclick="showInput();" onkeydown="showInput();" role="button">
+</div>
+
+<div id="output-text" class="column middle">
+    <h2>Output Text</h2>
+    <label>Automatically generated alt description</label>
+    <p><span id='displayTextAlt'></span></p>
+
+    <label>Automatically generated long description</label>
+    <p><span id='displayTextLong'></span></p>
+</div>
+
+<div id="output-tree" class="column right">
+    <h2>Output Tree</h2>
+    <div id="FullTree">
+        <ul>
+            <li>
+                <span class="caret"></span>
+                Tree view of Gosling description
+                <div id="GoslingFigureTreeView">  </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="createTree.js"></script>
+<script type="text/javascript" src="combinedGos2Acc.js"></script>
+
+
+</body>
+</html>
