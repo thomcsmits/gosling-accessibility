@@ -29,7 +29,9 @@ function gos2desc(spec) {
     desc.yDomain = spec.yDomain;
 
     // data
-    desc.dataSource = new Object()
+    desc.data = new Object();
+    desc.data.dataSource = new Object();
+    //desc.data.categories = new Object();
 
     // layout
     desc.structure = new Object()
@@ -65,8 +67,6 @@ function gos2desc(spec) {
     }
 
     desc.nTracks = countTracks;
-
-    //desc.positionMatrix = getPositionMatrix(desc);
     
     return(desc)
 }
@@ -171,27 +171,39 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
     subfig.mark = track.mark;
-    subfig.axes = new Object();
 
-    nSources = Object.keys(desc.dataSource).length;
+    subfig.data = new Object()
 
+    nSources = Object.keys(desc.data.dataSource).length;
     if (typeof track.data.url !== "undefined") {
-        if (desc.dataSource.hasOwnProperty(track.data.url)) {
-            subfig.dataSource = desc.dataSource[track.data.url]
+        if (desc.data.dataSource.hasOwnProperty(track.data.url)) {
+            subfig.data.dataSource = desc.data.dataSource[track.data.url]
         } else {
             if (nSources > 0) {
                 desc.allSubfiguresSameValue.dataSource = false;
             }
-            desc.dataSource[track.data.url] = nSources + 1
-            subfig.dataSource = nSources + 1
+            desc.data.dataSource[track.data.url] = nSources + 1
+            subfig.data.dataSource = nSources + 1
         }
     } else if (typeof track.data.type === "json" && subfig.data.values.length > 25) {
         if (nSources > 0) {
             desc.allSubfiguresSameValue.dataSource = false;
         }
-        desc.dataSource["newJsonSource" + nSources] = nSources + 1
-        subfig.dataSource = nSources + 1
+        desc.data.dataSource["newJsonSource" + nSources] = nSources + 1
+        subfig.data.dataSource = nSources + 1
     }
+
+    if (typeof track.data.categories !== "undefined") {
+        subfig.data.nCategories = track.data.categories.length
+    }
+
+    if (typeof track.data.binSize !== "undefined") {
+        subfig.data.binSize = track.data.binSize * 256
+    }
+
+
+    subfig.axes = new Object();
+
 
     const channelOptions = ["x", "xe", "y", "ye", "x1", "x1e", "y1", "y1e", "row", "size", "text", "color", "stroke", "strokeWidth", "opacity"]
 

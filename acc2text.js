@@ -77,7 +77,7 @@ function multipleSubfig(desc, textLong) {
             var subfigPlace = ""
         }
 
-        textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + " " + subfigPlace)
+        textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + subfigPlace)
 
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig], toReport))
         
@@ -114,14 +114,14 @@ function textAllSubfiguresSameValue(desc, textLong) {
 
     if (desc.allSubfiguresSameValue.xDomain) {
         if (typeof desc.structure.subfig0.xDomain  !== "undefined") {
-            textLong = textLong.concat(" The x-domain shown of all subfigure is chromosome " + desc.structure.subfig0.xDomain.chromosome + " in interval " + desc.structure.subfig0.xDomain.interval);
+            textLong = textLong.concat(" The x-domain shown of all subfigure is chromosome " + desc.structure.subfig0.xDomain.chromosome + " in interval (" + desc.structure.subfig0.xDomain.interval + ").");
         }
         toReport.xDomain = false;
     }
 
     if (desc.allSubfiguresSameValue.yDomain) {
         if (typeof desc.structure.subfig0.yDomain  !== "undefined") {
-            textLong = textLong.concat(" The y-domain shown of all subfigure is chromosome " + desc.structure.subfig0.yDomain.chromosome + " in interval " + desc.structure.subfig0.yDomain.interval);
+            textLong = textLong.concat(" The y-domain shown of all subfigure is chromosome " + desc.structure.subfig0.yDomain.chromosome + " in interval (" + desc.structure.subfig0.yDomain.interval + ").");
         }
         toReport.yDomain = false;
     }
@@ -142,9 +142,9 @@ function determinePlace(subfig, prevFigureToLeft) {
     currColNumber = subfig.colNumber;
     
     if (currRowNumber === 0) {
-        place = "(top row, ";
+        place = " (top row, ";
     } else {
-        place = "(row " + currRowNumber + ", ";
+        place = " (row " + currRowNumber + ", ";
     }
     if (currColNumber === 0) {
         place = place.concat("on the left)");
@@ -173,23 +173,46 @@ function addTextSubfig(subfig, toReport) {
     }
 
     if (toReport.dataSource) {
-        textSubfig = textSubfig.concat(" Data is from source " + subfig.dataSource + ".");
+        textSubfig = textSubfig.concat(" Data is from source " + subfig.data.dataSource + ".");
+    }
+
+    if (typeof subfig.data.binSize !== "undefined") {
+        textSubfig = textSubfig.concat(" Data is binned in intervals of " + subfig.data.binSize + " bp.");
     }
 
     hasGenomicAxes = false;
+
+    alreadyDescribed = undefined;
     for (axis in subfig.axes) {
-        textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + "-axis.")
-        
-        if (axis === "x" && subfig.axes[axis].type === "genomic" && toReport.xDomain) {
-            textSubfig = textSubfig.concat(" The x-domain shown is ...")
-        }
 
-        if (axis === "y" && subfig.axes[axis].type === "genomic" && toReport.yDomain) {
-            textSubfig = textSubfig.concat(" The y-domain shown is ...")
-        }
-
-        if (subfig.axes[axis].type === "genomic") {
-            hasGenomicAxes = true;
+        // check if multiple axis have the same data, and if so, describe them together
+        // this assumes a data field is only described by maximum of 2 axes
+        if (axis !== alreadyDescribed){
+            combinedAxes = false;
+            for (axis2 in subfig.axes) {
+                if (axis !== axis2) {
+                    if (subfig.axes[axis].type === subfig.axes[axis2].type) {
+                        textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + " and " + axis2 + "-axis.")
+                        combinedAxes = true;
+                        alreadyDescribed = axis2;
+                    }
+                }
+            }
+            if (!combinedAxes) {
+                textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + "-axis.")
+            }
+            
+            if (axis === "x" && subfig.axes[axis].type === "genomic" && toReport.xDomain) {
+                textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome + " in interval (" + subfig.xDomain.interval + ").");
+            }
+    
+            if (axis === "y" && subfig.axes[axis].type === "genomic" && toReport.yDomain) {
+                textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome + " in interval (" + subfig.yDomain.interval + ").");
+            }
+    
+            if (subfig.axes[axis].type === "genomic") {
+                hasGenomicAxes = true;
+            }
         }
     }
 
@@ -200,10 +223,6 @@ function addTextSubfig(subfig, toReport) {
     if (toReport.layout && subfig.layout === "circular") {
         textSubfig = textSubfig.concat(" The genome is displayed in a circular way.");
     }
-
-   
-
-    
 
     return textSubfig
 }
