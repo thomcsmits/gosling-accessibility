@@ -204,17 +204,43 @@ function addTextSubfig(subfig, toReport) {
             }
             textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + hasSameFieldText + "-axis.")
 
-            if (hasSameField.includes("x") && subfig.axes.x.type === "genomic" && toReport.xDomain) {
-                textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome + " in interval (" + subfig.xDomain.interval + ").");
+        }
+        
+        axisWithAxis = ["x", "y"]
+        if (axisWithAxis.includes(axis)) {
+            if (typeof subfig.axes[axis].axis === "undefined") {
+                if (axis === "x") {
+                    axisValue = " shown on top side of figure."
+                } else {
+                    axisValue = " shown on left side of figure."
+                }
+            } else {
+                if (subfig.axes[axis].axis === "none") {
+                    axisValue = " not shown."
+                } else {
+                    axisValue = " shown on " + subfig.axes[axis].axis + " side of figure."   
+                } 
+            } 
+            textSubfig = textSubfig.concat(" The " + axis + "-axis is" + axisValue)
+        }
+
+        axisWithLegend = ["row", "size", "text", "color"]
+        if (axisWithLegend.includes(axis)) {
+            if (typeof subfig.axes[axis].legend !== "undefined" && subfig.axes[axis].legend === true) {
+                textSubfig = textSubfig.concat(" Legend for " + axis + " is shown.")
             }
-    
-            if (hasSameField.includes("y") && subfig.axes.y.type === "genomic" && toReport.yDomain) {
-                textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome + " in interval (" + subfig.yDomain.interval + ").");
-            }
-    
-            if (subfig.axes[axis].type === "genomic") {
-                hasGenomicAxes = true;
-            }
+        }
+
+        if (axis === "x" && subfig.axes.x.type === "genomic" && toReport.xDomain) {
+            textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome + " in interval (" + subfig.xDomain.interval + ").");
+        }
+
+        if (axis === "y" && subfig.axes.y.type === "genomic" && toReport.yDomain) {
+            textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome + " in interval (" + subfig.yDomain.interval + ").");
+        }
+
+        if (subfig.axes[axis].type === "genomic") {
+            hasGenomicAxes = true;
         }
     }
 
