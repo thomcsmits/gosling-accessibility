@@ -173,8 +173,9 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     subfig.mark = track.mark;
     subfig.axes = new Object();
 
+    nSources = Object.keys(desc.dataSource).length;
+
     if (typeof track.data.url !== "undefined") {
-        nSources = Object.keys(desc.dataSource).length;
         if (desc.dataSource.hasOwnProperty(track.data.url)) {
             subfig.dataSource = desc.dataSource[track.data.url]
         } else {
@@ -184,10 +185,12 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
             desc.dataSource[track.data.url] = nSources + 1
             subfig.dataSource = nSources + 1
         }
-    }
-
-    if (typeof track.data.type === "json" && subfig.data.values.length > 25) {
-        desc.dataSource
+    } else if (typeof track.data.type === "json" && subfig.data.values.length > 25) {
+        if (nSources > 0) {
+            desc.allSubfiguresSameValue.dataSource = false;
+        }
+        desc.dataSource["newJsonSource" + nSources] = nSources + 1
+        subfig.dataSource = nSources + 1
     }
 
     const channelOptions = ["x", "xe", "y", "ye", "x1", "x1e", "y1", "y1e", "row", "size", "text", "color", "stroke", "strokeWidth", "opacity"]
