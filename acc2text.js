@@ -182,31 +182,33 @@ function addTextSubfig(subfig, toReport) {
 
     hasGenomicAxes = false;
 
-    alreadyDescribed = undefined;
-    for (axis in subfig.axes) {
+    alreadyDescribed = [];
 
+    for (axis in subfig.axes) {
         // check if multiple axis have the same data, and if so, describe them together
-        // this assumes a data field is only described by maximum of 2 axes
-        if (axis !== alreadyDescribed){
-            combinedAxes = false;
+        if (!alreadyDescribed.includes(axis)){
+            hasSameField = [axis];
             for (axis2 in subfig.axes) {
-                if (axis !== axis2) {
-                    if (subfig.axes[axis].type === subfig.axes[axis2].type) {
-                        textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + " and " + axis2 + "-axis.")
-                        combinedAxes = true;
-                        alreadyDescribed = axis2;
+                if (axis2 !== axis) {
+                    if (subfig.axes[axis].field === subfig.axes[axis2].field && subfig.axes[axis].type === subfig.axes[axis2].type) {
+                        hasSameField = [...hasSameField, axis2];
+                        alreadyDescribed = [...alreadyDescribed, axis2];
                     }
                 }
             }
-            if (!combinedAxes) {
-                textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + "-axis.")
+            if (hasSameField.length > 1) {
+                hasSameFieldText = hasSameField.slice(0, -1).join(", ") + " and " + hasSameField.slice(-1);
             }
-            
-            if (axis === "x" && subfig.axes[axis].type === "genomic" && toReport.xDomain) {
+            else {
+                hasSameFieldText = hasSameField.toString();
+            }
+            textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + hasSameFieldText + "-axis.")
+
+            if (hasSameField.includes("x") && subfig.axes.x.type === "genomic" && toReport.xDomain) {
                 textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome + " in interval (" + subfig.xDomain.interval + ").");
             }
     
-            if (axis === "y" && subfig.axes[axis].type === "genomic" && toReport.yDomain) {
+            if (hasSameField.includes("y") && subfig.axes.y.type === "genomic" && toReport.yDomain) {
                 textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome + " in interval (" + subfig.yDomain.interval + ").");
             }
     
