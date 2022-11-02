@@ -36,9 +36,12 @@ function gos2desc(spec) {
         "assembly" : true,
         "layout" : true,
         "arrangement" : true,
+        "allVertical" : true, 
+        "allHorizontal" : true,
         "alignment" : true,
         "xDomain" : true,
-        "yDomain" : true
+        "yDomain" : true,
+        "dataSource" : true,
     }
 
     var savedAttributes = {
@@ -52,7 +55,16 @@ function gos2desc(spec) {
 
     traverseTracks(spec, savedAttributes, desc) 
 
-    desc.nTracks = countTracks
+    if (desc.allSubfiguresSameValue.allVertical === false && desc.allSubfiguresSameValue.allHorizontal === false) {
+        desc.allSubfiguresSameValue.arrangement = false;
+    } else {
+        desc.allSubfiguresSameValue.arrangement = true;
+    }
+
+    desc.nTracks = countTracks;
+
+    //desc.positionMatrix = getPositionMatrix(desc);
+    
     return(desc)
 }
 
@@ -64,7 +76,13 @@ function traverseTracks(specPart, savedAttributes, desc){
         savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
 
         desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
-        countTracks ++; 
+        countTracks ++;
+        if (rowViews !== 0) {
+            desc.allSubfiguresSameValue.allHorizontal = false;
+        }
+        if (colViews !== 0) {
+            desc.allSubfiguresSameValue.allVertical = false;
+        } 
 
         return;
     }
@@ -82,6 +100,12 @@ function traverseTracks(specPart, savedAttributes, desc){
             }
             desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc);
             countTracks ++;
+            if (rowViews !== 0) {
+                desc.allSubfiguresSameValue.allHorizontal = false;
+            }
+            if (colViews !== 0) {
+                desc.allSubfiguresSameValue.allVertical = false;
+            }
         });
         return;
     }
@@ -143,6 +167,7 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     subfig.overlayed = false;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
+    subfig.dataSource = 1;
     subfig.mark = track.mark;
     subfig.axes = new Object();
 
@@ -171,7 +196,6 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
         }
     }
     if (typeof track.y !== "undefined") {
-        console.log(track)
         if (typeof track.y.domain !== "undefined") {
             subfig.yDomain = track.y.domain;  
             if (subfig.yDomain != savedAttributes.yDomain) {
