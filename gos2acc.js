@@ -128,7 +128,10 @@ function traverseTracks(specPart, savedAttributes, desc){
 function updateSavedAttributes(view, savedAttributes, desc) {
     savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
-    for (attrName in Object.keys(savedAttributes)) {
+    attrNames = Object.keys(savedAttributes)
+
+    for (let i = 0; i < attrNames.length; i++) {
+        attrName = attrNames[i]
         if (typeof view[attrName] !== "undefined") {
             savedAttributesCopy[attrName] = view[attrName];
             if (savedAttributesCopy[attrName] != savedAttributes[attrName]) {
