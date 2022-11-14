@@ -48,7 +48,6 @@ function oneSubfig(desc, textLong) {
         "yDomain" : hasGenomicAxes & !desc.top.domain.yFullGenome,
         "dataSource" : false,
     }
-    console.log(toReport)
         
     textLong = textLong.concat(" The figure")
     textLong = textLong.concat(addTextSubfig(desc.structure.subfig0, toReport))
@@ -78,6 +77,10 @@ function multipleSubfig(desc, textLong) {
         }
 
         textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + subfigPlace)
+
+        if (typeof subfig.title !== "undefined") {
+            textLong = textLong.concat(", titled '" +  subfig.title + "', ")
+        }
 
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig], toReport))
         
@@ -143,11 +146,14 @@ function textAllSubfiguresSameValue(desc, textLong) {
         toReport.dataSource = true;
     }
 
-    if (desc.data.categories !== "undefined") {
+    if (typeof desc.data.categories !== "undefined") {
         if (desc.allSubfiguresSameValue.categories) {
-            textLong = textLong.concat(" There are " + desc.data.categories.length + " categories (samples) displayed: " + desc.data.categories.slice(0, -1).join(", ") + " and " + desc.data.categories.slice(-1) + ".");
-        }
-        else {
+            if (desc.data.categories.length === 1) {
+                textSubfig = textSubfig.concat(" There is only category shown:  " + subfig.data.categories[0] + ".");
+            } else {
+                textLong = textLong.concat(" There are " + desc.data.categories.length + " categories (samples) displayed: " + desc.data.categories.slice(0, -1).join(", ") + " and " + desc.data.categories.slice(-1) + ".");
+            }
+        } else {
             toReport.categories = true;
         }
     }
@@ -211,8 +217,12 @@ function addTextSubfig(subfig, toReport) {
         textSubfig = textSubfig.concat(" Data is binned in intervals of " + subfig.data.binSize + " bp.");
     }
 
-    if (typeof subfig.data.categories !== "undefined") {
-        textSubfig = textSubfig.concat(" The " + subfig.data.nCategories + " different samples shown are: " + subfig.data.categories.slice(0, -1).join(", ") + " and " + subfig.data.categories.slice(-1) + ".");
+    if (toReport.categories && typeof subfig.data.categories !== "undefined") {
+        if (subfig.data.nCategories === 1) {
+            textSubfig = textSubfig.concat(" The only category shown is " + subfig.data.categories[0] + ".");
+        } else {
+            textSubfig = textSubfig.concat(" The " + subfig.data.nCategories + " different samples shown are: " + subfig.data.categories.slice(0, -1).join(", ") + " and " + subfig.data.categories.slice(-1) + ".");
+        }
     }
 
     hasGenomicAxes = false;

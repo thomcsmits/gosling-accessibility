@@ -164,8 +164,7 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     subfig.rowNumber = rowViews;
     subfig.colNumber = colViews;
     subfig.multiTrackView = {"oneTrackInView": oneTrackInView, "oneMarkInView": oneMarkInView, "onlyDifferenceInMark": onlyDifferenceInMark}
-    subfig.oneTrackInView = oneTrackInView;
-    subfig.oneMarkInView = oneMarkInView;
+    subfig.title = track.title;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
     
@@ -197,10 +196,10 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     if (typeof track.data.categories !== "undefined") {
         subfig.data.categories = track.data.categories;
         subfig.data.nCategories = track.data.categories.length;
-        if (typeof desc.data.categories !== "undefined") {
-            desc.data.categories = track.data.categories
+        if (typeof desc.data.categories === "undefined") {
+            desc.data.categories = track.data.categories;
         } else {
-            if (track.data.categories !== desc.data.categories) {
+            if (track.data.categories.join() !== desc.data.categories.join()) {
                 desc.allSubfiguresSameValue.categories = false;
             }
         }
@@ -264,8 +263,18 @@ function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, col
         for (let i = 0; i < specPart.tracks.length; i++) {
             mark[i] = specPart.tracks[i].mark;
         }
-        subfig.mark = mark;
-
+        // removing brush as a mark, checking if it is now a 'normal' track
+        let index = mark.indexOf("brush");
+        if (index !== -1) {
+            mark.splice(index, 1);
+        }
+        if (mark.length === 1) {
+            subfig.multiTrackView = {"oneTrackInView": true, "oneMarkInView": true, "onlyDifferenceInMark": null}
+            subfig.mark = mark[0];
+            subfig.brush = true;
+        } else {
+            subfig.mark = mark;
+        }
     } 
     // scenario: 2 stacked full specifications
     // scenario: complicated overlay / other
