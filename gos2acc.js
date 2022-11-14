@@ -159,16 +159,18 @@ function updateParentalProperties(desc) {
 
 
 
-function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc, overlayed = false, oneMark = true) {
+function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc, oneTrackInView = true, oneMarkInView = true, onlyDifferenceInMark = null) {
     subfig = new Object();
     subfig.number = countTracks;
     subfig.rowNumber = rowViews;
     subfig.colNumber = colViews;
-    subfig.overlayed = overlayed;
+    subfig.multiTrackView = {"oneTrackInView": oneTrackInView, "oneMarkInView": oneMarkInView, "onlyDifferenceInMark": onlyDifferenceInMark}
+    subfig.oneTrackInView = oneTrackInView;
+    subfig.oneMarkInView = oneMarkInView;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
     
-    if (oneMark) {
+    if (oneMarkInView) {
         subfig.mark = track.mark;
     }
 
@@ -217,7 +219,9 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
         }
     }
 
-    determineSpecialCases(track, subfig)
+    if (oneMarkInView) {
+        determineSpecialCases(track, subfig)
+    }
 
     if (typeof track.x !== "undefined") {
         if (typeof track.x.domain !== "undefined") {
@@ -245,19 +249,39 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
 
 
 function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc) {
-    subfig = new Object()
-    subfig.number = countTracks
-    subfig.rowNumber = rowViews;
-    subfig.colNumber = colViews;
-    subfig.overlayed = true
 
-    subfig.layers = new Object()
+    // scenario: only extra specification with multiple tracks is multiple mark types
+    if (Object.keys(specPart.tracks[0]).join() === Array("mark").join()) {
+        subfig = describeSubfig(specPart, countTracks, rowViews, colViews, savedAttributes, desc, oneTrackInView = false, oneMarkInView = false, onlyDifferenceInMark = true)
+        var mark = new Array(specPart.tracks.length);
+        for (let i = 0; i < specPart.tracks.length; i++) {
+            mark[i] = specPart.tracks[i].mark;
+        }
+        subfig.mark = mark;
 
-    // if stacked
+    } 
+    // scenario: 2 stacked full specifications
+    // scenario: complicated overlay / other
+    else {
+        subfig = new Object()
+        subfig.number = countTracks
+        subfig.rowNumber = rowViews;
+        subfig.colNumber = colViews;
+        subfig.multiTrackView = {"oneTrackInView": false, "oneMarkInView": null, "onlyDifferenceInMark": false}
+    }
 
-    // if overlayed
-        // option 1: each overlayed track has its own data
-        // option 2: all from the same data
+    subfig.nOverlayed = specPart.tracks.length;
+    
+    // var temporaryTop = JSON.parse(JSON.stringify(specPart));
+    // delete temporaryTop.tracks;
+    // for (let i = 0; i < subfig.nOverlayed; i++) {
+    //     subfig.layers[i] = new Object();
+    //     Object.obtain(subfig.layers[i], temporaryTop);
+    // }
+
+    // for top things: iterate
+    // for nTracks: iterate
+    // stacked or overlayed
 
     return subfig
 }

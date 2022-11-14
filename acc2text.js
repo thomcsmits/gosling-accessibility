@@ -7,7 +7,7 @@ function desc2text(desc) {
     textAlt = textAlt.concat(". Automatic full description at URL.")
     
     // long description
-    var textLong = "Description: "
+    var textLong = "Description:"
 
     if (typeof desc.title !== 'undefined') {
         textLong = textLong.concat(" Gosling figure with title: '" + desc.title + "'.")
@@ -172,15 +172,25 @@ function addTextSubfig(subfig, toReport) {
 
     var textSubfig = "";
 
-    if (subfig.overlayed == true) {
-        textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks). Gosling's automatic text generation currently doesn't support overlayed plots.")
-        return textSubfig
-    }
+    //{"oneTrackInView": false, "oneMarkInView": null, "onlyDifferenceInMark": false}
 
-    if (typeof subfig.specialDesc !== "undefined") {
-        textSubfig = textSubfig.concat(" shows a " + subfig.specialDesc + ".")
+    if (!subfig.multiTrackView.oneTrackInView) {
+        if (subfig.multiTrackView.onlyDifferenceInMark) {
+            if (subfig.alignment === "stack") {
+                textSubfig = textSubfig.concat(" is an stacked plot (with " + subfig.nOverlayed + " tracks, only differing in their mark). The shown marks are " + subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1) + ".");
+            } else {
+                textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks, only differing in their mark). The shown marks are " + subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1) + ".");
+            }
+        } else {
+            textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks). Gosling's automatic text generation currently doesn't support overlayed plots.");
+            return textSubfig;
+        }  
     } else {
-        textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
+        if (typeof subfig.specialDesc !== "undefined") {
+            textSubfig = textSubfig.concat(" shows a " + subfig.specialDesc + ".")
+        } else {
+            textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
+        }
     }
 
     if (toReport.dataSource) {
