@@ -7,31 +7,36 @@ function gos2desc(spec) {
     // general properties
     desc.title = spec.title;
     desc.subtitle = spec.subtitle;
-    
+    desc.top = new Object();
+
     // default values
     const defaultValues = {
         assembly : "hg38",
         layout : "linear",
         arrangement : "vertical",
-        alignment : "stack"        
+        alignment : "stack",
+        static : false       
     }
 
     for (val in defaultValues) {
         if (typeof spec[val] !== "undefined") {
-            desc[val] = spec[val];
+            desc.top[val] = spec[val];
         } else {
-            desc[val] = defaultValues[val];
+            desc.top[val] = defaultValues[val];
         }
     }
 
     // domain
-    desc.xDomain = spec.xDomain;
-    desc.yDomain = spec.yDomain;
+    desc.top.domain = new Object()
+    desc.top.domain.xFullGenome = true;
+    desc.top.domain.xDomain = spec.xDomain;
+    desc.top.domain.yFullGenome = true;
+    desc.top.domain.yDomain = spec.yDomain;
 
     // data
     desc.data = new Object();
     desc.data.dataSource = new Object();
-    //desc.data.categories = new Object();
+    desc.data.categories = new Object();
 
     // layout
     desc.structure = new Object()
@@ -44,27 +49,25 @@ function gos2desc(spec) {
         "allVertical" : true, 
         "allHorizontal" : true,
         "alignment" : true,
+        "static" : true,
         "xDomain" : true,
         "yDomain" : true,
         "dataSource" : true,
+        "categories" : true,
     }
 
     var savedAttributes = {
-        "assembly" : desc.assembly,
-        "layout" : desc.layout,
-        "arrangement" : desc.arrangement,
-        "alignment" : desc.alignment,
-        "xDomain" : desc.xDomain,
-        "yDomain" : desc.yDomain
+        "assembly" : desc.top.assembly,
+        "layout" : desc.top.layout,
+        "arrangement" : desc.top.arrangement,
+        "alignment" : desc.top.alignment,
+        "xDomain" : desc.top.domain.xDomain,
+        "yDomain" : desc.top.domain.yDomain
     }
 
     traverseTracks(spec, savedAttributes, desc) 
 
-    if (desc.allSubfiguresSameValue.allVertical === false && desc.allSubfiguresSameValue.allHorizontal === false) {
-        desc.allSubfiguresSameValue.arrangement = false;
-    } else {
-        desc.allSubfiguresSameValue.arrangement = true;
-    }
+    updateParentalProperties(desc) 
 
     desc.nTracks = countTracks;
     
@@ -146,10 +149,7 @@ function traverseTracks(specPart, savedAttributes, desc){
 function updateSavedAttributes(view, savedAttributes, desc) {
     savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
-    savedAttributesNames = ["assembly", "layout", "arrangement", "alignment", "xDomain", "yDomain"]
-
-    for (let i = 0; i < savedAttributesNames.length; i++) {
-        attrName = savedAttributesNames[i]
+    for (attrName in Object.keys(savedAttributes)) {
         if (typeof view[attrName] !== "undefined") {
             savedAttributesCopy[attrName] = view[attrName];
             if (savedAttributesCopy[attrName] != savedAttributes[attrName]) {
@@ -157,20 +157,40 @@ function updateSavedAttributes(view, savedAttributes, desc) {
             }
         }
     }
-
     return savedAttributesCopy;
 }
 
 
-function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc) {
+function updateParentalProperties(desc) {
+    if (desc.allSubfiguresSameValue.allVertical === false && desc.allSubfiguresSameValue.allHorizontal === false) {
+        desc.allSubfiguresSameValue.arrangement = false;
+    } else {
+        desc.allSubfiguresSameValue.arrangement = true;
+    }
+
+    if (typeof desc.top.domain.xDomain !== "undefined" & desc.allSubfiguresSameValue.xDomain) {
+        desc.top.domain.xFullGenome = false;
+    }
+    if (typeof desc.top.domain.yDomain !== "undefined" & desc.allSubfiguresSameValue.yDomain) {
+        desc.top.domain.yFullGenome = false;
+    }
+}
+
+
+
+
+function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc, overlayed = false, oneMark = true) {
     subfig = new Object();
     subfig.number = countTracks;
     subfig.rowNumber = rowViews;
     subfig.colNumber = colViews;
-    subfig.overlayed = false;
+    subfig.overlayed = overlayed;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
-    subfig.mark = track.mark;
+    
+    if (oneMark) {
+        subfig.mark = track.mark;
+    }
 
     subfig.data = new Object()
 

@@ -44,10 +44,11 @@ function oneSubfig(desc, textLong) {
     toReport = {
         "assembly" : hasGenomicAxes,
         "layout" : true,
-        "xDomain" : hasGenomicAxes,
-        "yDomain" : hasGenomicAxes,
+        "xDomain" : hasGenomicAxes & !desc.top.domain.xFullGenome,
+        "yDomain" : hasGenomicAxes & !desc.top.domain.yFullGenome,
         "dataSource" : false,
     }
+    console.log(toReport)
         
     textLong = textLong.concat(" The figure")
     textLong = textLong.concat(addTextSubfig(desc.structure.subfig0, toReport))
@@ -112,7 +113,7 @@ function textAllSubfiguresSameValue(desc, textLong) {
     }
 
     if (desc.allSubfiguresSameValue.xDomain) {
-        if (typeof desc.structure.subfig0.xDomain  !== "undefined") {
+        if (typeof desc.structure.subfig0.xDomain !== "undefined") {
             textLong = textLong.concat(" The x-domain shown of all subfigures is chromosome " + desc.structure.subfig0.xDomain.chromosome)
             if (typeof desc.structure.subfig0.xDomain.interval !== "undefined") {
                 textLong = textLong.concat(" in interval (" + desc.structure.subfig0.xDomain.interval + ").");
@@ -242,20 +243,29 @@ function addTextSubfig(subfig, toReport) {
         }
 
         if (axis === "x" && subfig.axes.x.type === "genomic" && toReport.xDomain) {
-            textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome)
-            if (typeof subfig.xDomain.interval !== "undefined") {
-                textLong = textLong.concat(" in interval (" + subfig.xDomain.interval + ").");
+            if (typeof subfig.xDomain !== "undefined") {
+                textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome)
+                if (typeof subfig.xDomain.interval !== "undefined") {
+                    textSubfig = textSubfig.concat(" in interval (" + subfig.xDomain.interval + ").");
+                } else {
+                    textSubfig = textSubfig.concat(".");
+                }
             } else {
-                textLong = textLong.concat(".");
+                textSubfig = textSubfig.concat(" Full genome is shown.");
             }
+           
         }
 
         if (axis === "y" && subfig.axes.y.type === "genomic" && toReport.yDomain) {
-            textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome)
-            if (typeof subfig.yDomain.interval !== "undefined") {
-                textLong = textLong.concat(" in interval (" + subfig.yDomain.interval + ").");
+            if (typeof subfig.xDomain !== "undefined") {
+                textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome)
+                if (typeof subfig.yDomain.interval !== "undefined") {
+                    textSubfig = textSubfig.concat(" in interval (" + subfig.yDomain.interval + ").");
+                } else {
+                    textSubfig = textSubfig.concat(".");
+                }
             } else {
-                textLong = textLong.concat(".");
+                textSubfig = textSubfig.concat(" Full genome is shown.");
             }
         }
 
