@@ -36,7 +36,6 @@ function gos2desc(spec) {
     // data
     desc.data = new Object();
     desc.data.dataSource = new Object();
-    desc.data.categories = new Object();
 
     // layout
     desc.structure = new Object()
@@ -129,7 +128,10 @@ function traverseTracks(specPart, savedAttributes, desc){
 function updateSavedAttributes(view, savedAttributes, desc) {
     savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
-    for (attrName in Object.keys(savedAttributes)) {
+    attrNames = Object.keys(savedAttributes)
+
+    for (let i = 0; i < attrNames.length; i++) {
+        attrName = attrNames[i]
         if (typeof view[attrName] !== "undefined") {
             savedAttributesCopy[attrName] = view[attrName];
             if (savedAttributesCopy[attrName] != savedAttributes[attrName]) {
@@ -165,8 +167,7 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     subfig.rowNumber = rowViews;
     subfig.colNumber = colViews;
     subfig.multiTrackView = {"oneTrackInView": oneTrackInView, "oneMarkInView": oneMarkInView, "onlyDifferenceInMark": onlyDifferenceInMark}
-    subfig.oneTrackInView = oneTrackInView;
-    subfig.oneMarkInView = oneMarkInView;
+    subfig.title = track.title;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
     
@@ -196,7 +197,15 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     }
 
     if (typeof track.data.categories !== "undefined") {
-        subfig.data.nCategories = track.data.categories.length
+        subfig.data.categories = track.data.categories;
+        subfig.data.nCategories = track.data.categories.length;
+        if (typeof desc.data.categories === "undefined") {
+            desc.data.categories = track.data.categories;
+        } else {
+            if (track.data.categories.join() !== desc.data.categories.join()) {
+                desc.allSubfiguresSameValue.categories = false;
+            }
+        }
     }
 
     if (typeof track.data.binSize !== "undefined") {
@@ -257,8 +266,18 @@ function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, col
         for (let i = 0; i < specPart.tracks.length; i++) {
             mark[i] = specPart.tracks[i].mark;
         }
-        subfig.mark = mark;
-
+        // removing brush as a mark, checking if it is now a 'normal' track
+        let index = mark.indexOf("brush");
+        if (index !== -1) {
+            mark.splice(index, 1);
+        }
+        if (mark.length === 1) {
+            subfig.multiTrackView = {"oneTrackInView": true, "oneMarkInView": true, "onlyDifferenceInMark": null}
+            subfig.mark = mark[0];
+            subfig.brush = true;
+        } else {
+            subfig.mark = mark;
+        }
     } 
     // scenario: 2 stacked full specifications
     // scenario: complicated overlay / other
