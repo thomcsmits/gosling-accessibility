@@ -1,6 +1,6 @@
 function desc2text(desc) {
     // brief alt
-    var textAlt = "Figure created with Gosling"
+    var textAlt = "Genomic visualization created with Gosling"
     if (desc.nTracks > 1) {
         textAlt = textAlt.concat( " showing " + desc.nTracks + " subfigures");
     }

@@ -77,42 +77,22 @@ function gos2desc(spec) {
 
 
 function traverseTracks(specPart, savedAttributes, desc){
-
-    if ("alignment" in specPart && specPart.alignment === "overlay") {
+    if ("tracks" in specPart) { 
         savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
 
-        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
+        if (specPart.tracks.length > 1) {
+            desc.structure["subfig" + countTracks] = describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
+        } else {
+            desc.structure["subfig" + countTracks] = describeSubfig(specPart.tracks[0], countTracks, rowViews, colViews, savedAttributes, desc);
+        }
         countTracks ++;
+            
         if (rowViews !== 0) {
             desc.allSubfiguresSameValue.allHorizontal = false;
         }
         if (colViews !== 0) {
             desc.allSubfiguresSameValue.allVertical = false;
-        } 
-
-        return;
-    }
-
-    if ("tracks" in specPart) { 
-        savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
-
-        specPart.tracks.forEach((track, i) => {      
-            if (i != 0) {
-                if (savedAttributes.arrangement === "vertical") {
-                    rowViews ++;
-                } else {
-                    colViews ++;
-                }
-            }
-            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc);
-            countTracks ++;
-            if (rowViews !== 0) {
-                desc.allSubfiguresSameValue.allHorizontal = false;
-            }
-            if (colViews !== 0) {
-                desc.allSubfiguresSameValue.allVertical = false;
-            }
-        });
+        };
         return;
     }
 
@@ -123,7 +103,7 @@ function traverseTracks(specPart, savedAttributes, desc){
         specPart.views.forEach((view, i) => {
 
             if (i !== 0) {
-                if (savedAttributes.arrangement === "vertical") {
+                if (savedAttributes.arrangement === "vertical" | savedAttributes.arrangement === "parallel") {
                     rowViews ++;
                 } else {
                     colViews ++;
@@ -135,7 +115,7 @@ function traverseTracks(specPart, savedAttributes, desc){
             traverseTracks(view, savedAttributesCopy, desc);
         });
 
-        if (savedAttributes.arrangement === "vertical") {
+        if (savedAttributes.arrangement === "vertical" | savedAttributes.arrangement === "parallel") {
             rowViews = currRow;
         } else {
             colViews = currCol;
@@ -264,7 +244,7 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
 }
 
 
-function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAttributes, desc) {
+function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc) {
     subfig = new Object()
     subfig.number = countTracks
     subfig.rowNumber = rowViews;
@@ -273,10 +253,11 @@ function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAt
 
     subfig.layers = new Object()
 
-    
+    // if stacked
 
-    // option 1: each overlayed track has its own data
-    // option 2: all from the same data
+    // if overlayed
+        // option 1: each overlayed track has its own data
+        // option 2: all from the same data
 
     return subfig
 }
