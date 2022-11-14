@@ -7,26 +7,36 @@ function gos2desc(spec) {
     // general properties
     desc.title = spec.title;
     desc.subtitle = spec.subtitle;
-    
+    desc.top = new Object();
+
     // default values
     const defaultValues = {
         assembly : "hg38",
         layout : "linear",
         arrangement : "vertical",
-        alignment : "stack"        
+        alignment : "stack",
+        static : false       
     }
 
     for (val in defaultValues) {
         if (typeof spec[val] !== "undefined") {
-            desc[val] = spec[val];
+            desc.top[val] = spec[val];
         } else {
-            desc[val] = defaultValues[val];
+            desc.top[val] = defaultValues[val];
         }
     }
 
     // domain
-    desc.xDomain = spec.xDomain;
-    desc.yDomain = spec.yDomain;
+    desc.top.domain = new Object()
+    desc.top.domain.xFullGenome = true;
+    desc.top.domain.xDomain = spec.xDomain;
+    desc.top.domain.yFullGenome = true;
+    desc.top.domain.yDomain = spec.yDomain;
+
+    // data
+    desc.data = new Object();
+    desc.data.dataSource = new Object();
+    desc.data.categories = new Object();
 
     // layout
     desc.structure = new Object()
@@ -39,31 +49,27 @@ function gos2desc(spec) {
         "allVertical" : true, 
         "allHorizontal" : true,
         "alignment" : true,
+        "static" : true,
         "xDomain" : true,
         "yDomain" : true,
         "dataSource" : true,
+        "categories" : true,
     }
 
     var savedAttributes = {
-        "assembly" : desc.assembly,
-        "layout" : desc.layout,
-        "arrangement" : desc.arrangement,
-        "alignment" : desc.alignment,
-        "xDomain" : desc.xDomain,
-        "yDomain" : desc.yDomain
+        "assembly" : desc.top.assembly,
+        "layout" : desc.top.layout,
+        "arrangement" : desc.top.arrangement,
+        "alignment" : desc.top.alignment,
+        "xDomain" : desc.top.domain.xDomain,
+        "yDomain" : desc.top.domain.yDomain
     }
 
     traverseTracks(spec, savedAttributes, desc) 
 
-    if (desc.allSubfiguresSameValue.allVertical === false && desc.allSubfiguresSameValue.allHorizontal === false) {
-        desc.allSubfiguresSameValue.arrangement = false;
-    } else {
-        desc.allSubfiguresSameValue.arrangement = true;
-    }
+    updateParentalProperties(desc) 
 
     desc.nTracks = countTracks;
-
-    //desc.positionMatrix = getPositionMatrix(desc);
     
     return(desc)
 }
@@ -71,42 +77,22 @@ function gos2desc(spec) {
 
 
 function traverseTracks(specPart, savedAttributes, desc){
-
-    if ("alignment" in specPart && specPart.alignment === "overlay") {
+    if ("tracks" in specPart) { 
         savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
 
-        desc.structure["subfig" + countTracks] = describeSubfigOverlayed(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
+        if (specPart.tracks.length > 1) {
+            desc.structure["subfig" + countTracks] = describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc);
+        } else {
+            desc.structure["subfig" + countTracks] = describeSubfig(specPart.tracks[0], countTracks, rowViews, colViews, savedAttributes, desc);
+        }
         countTracks ++;
+            
         if (rowViews !== 0) {
             desc.allSubfiguresSameValue.allHorizontal = false;
         }
         if (colViews !== 0) {
             desc.allSubfiguresSameValue.allVertical = false;
-        } 
-
-        return;
-    }
-
-    if ("tracks" in specPart) { 
-        savedAttributesCopy = updateSavedAttributes(specPart, savedAttributes, desc);
-
-        specPart.tracks.forEach((track, i) => {      
-            if (i != 0) {
-                if (savedAttributes.arrangement === "vertical") {
-                    rowViews ++;
-                } else {
-                    colViews ++;
-                }
-            }
-            desc.structure["subfig" + countTracks] = describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc);
-            countTracks ++;
-            if (rowViews !== 0) {
-                desc.allSubfiguresSameValue.allHorizontal = false;
-            }
-            if (colViews !== 0) {
-                desc.allSubfiguresSameValue.allVertical = false;
-            }
-        });
+        };
         return;
     }
 
@@ -117,7 +103,7 @@ function traverseTracks(specPart, savedAttributes, desc){
         specPart.views.forEach((view, i) => {
 
             if (i !== 0) {
-                if (savedAttributes.arrangement === "vertical") {
+                if (savedAttributes.arrangement === "vertical" | savedAttributes.arrangement === "parallel") {
                     rowViews ++;
                 } else {
                     colViews ++;
@@ -129,7 +115,7 @@ function traverseTracks(specPart, savedAttributes, desc){
             traverseTracks(view, savedAttributesCopy, desc);
         });
 
-        if (savedAttributes.arrangement === "vertical") {
+        if (savedAttributes.arrangement === "vertical" | savedAttributes.arrangement === "parallel") {
             rowViews = currRow;
         } else {
             colViews = currCol;
@@ -143,10 +129,7 @@ function traverseTracks(specPart, savedAttributes, desc){
 function updateSavedAttributes(view, savedAttributes, desc) {
     savedAttributesCopy = JSON.parse(JSON.stringify(savedAttributes));
 
-    savedAttributesNames = ["assembly", "layout", "arrangement", "alignment", "xDomain", "yDomain"]
-
-    for (let i = 0; i < savedAttributesNames.length; i++) {
-        attrName = savedAttributesNames[i]
+    for (attrName in Object.keys(savedAttributes)) {
         if (typeof view[attrName] !== "undefined") {
             savedAttributesCopy[attrName] = view[attrName];
             if (savedAttributesCopy[attrName] != savedAttributes[attrName]) {
@@ -154,22 +137,75 @@ function updateSavedAttributes(view, savedAttributes, desc) {
             }
         }
     }
-
     return savedAttributesCopy;
 }
 
 
-function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc) {
+function updateParentalProperties(desc) {
+    if (desc.allSubfiguresSameValue.allVertical === false && desc.allSubfiguresSameValue.allHorizontal === false) {
+        desc.allSubfiguresSameValue.arrangement = false;
+    } else {
+        desc.allSubfiguresSameValue.arrangement = true;
+    }
+
+    if (typeof desc.top.domain.xDomain !== "undefined" & desc.allSubfiguresSameValue.xDomain) {
+        desc.top.domain.xFullGenome = false;
+    }
+    if (typeof desc.top.domain.yDomain !== "undefined" & desc.allSubfiguresSameValue.yDomain) {
+        desc.top.domain.yFullGenome = false;
+    }
+}
+
+
+
+
+function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes, desc, oneTrackInView = true, oneMarkInView = true, onlyDifferenceInMark = null) {
     subfig = new Object();
     subfig.number = countTracks;
     subfig.rowNumber = rowViews;
     subfig.colNumber = colViews;
-    subfig.overlayed = false;
+    subfig.multiTrackView = {"oneTrackInView": oneTrackInView, "oneMarkInView": oneMarkInView, "onlyDifferenceInMark": onlyDifferenceInMark}
+    subfig.oneTrackInView = oneTrackInView;
+    subfig.oneMarkInView = oneMarkInView;
     subfig.assembly = savedAttributes.assembly;
     subfig.layout = savedAttributes.layout;
-    subfig.dataSource = 1;
-    subfig.mark = track.mark;
+    
+    if (oneMarkInView) {
+        subfig.mark = track.mark;
+    }
+
+    subfig.data = new Object()
+
+    nSources = Object.keys(desc.data.dataSource).length;
+    if (typeof track.data.url !== "undefined") {
+        if (desc.data.dataSource.hasOwnProperty(track.data.url)) {
+            subfig.data.dataSource = desc.data.dataSource[track.data.url]
+        } else {
+            if (nSources > 0) {
+                desc.allSubfiguresSameValue.dataSource = false;
+            }
+            desc.data.dataSource[track.data.url] = nSources + 1
+            subfig.data.dataSource = nSources + 1
+        }
+    } else if (typeof track.data.type === "json" && subfig.data.values.length > 25) {
+        if (nSources > 0) {
+            desc.allSubfiguresSameValue.dataSource = false;
+        }
+        desc.data.dataSource["newJsonSource" + nSources] = nSources + 1
+        subfig.data.dataSource = nSources + 1
+    }
+
+    if (typeof track.data.categories !== "undefined") {
+        subfig.data.nCategories = track.data.categories.length
+    }
+
+    if (typeof track.data.binSize !== "undefined") {
+        subfig.data.binSize = track.data.binSize * 256
+    }
+
+
     subfig.axes = new Object();
+
 
     const channelOptions = ["x", "xe", "y", "ye", "x1", "x1e", "y1", "y1e", "row", "size", "text", "color", "stroke", "strokeWidth", "opacity"]
 
@@ -183,7 +219,9 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
         }
     }
 
-    determineSpecialCases(track, subfig)
+    if (oneMarkInView) {
+        determineSpecialCases(track, subfig)
+    }
 
     if (typeof track.x !== "undefined") {
         if (typeof track.x.domain !== "undefined") {
@@ -210,19 +248,40 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
 }
 
 
-function describeSubfigOverlayed(track, countTracks, rowViews, colViews, savedAttributes, desc) {
-    subfig = new Object()
-    subfig.number = countTracks
-    subfig.rowNumber = rowViews;
-    subfig.colNumber = colViews;
-    subfig.overlayed = true
+function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc) {
 
-    subfig.layers = new Object()
+    // scenario: only extra specification with multiple tracks is multiple mark types
+    if (Object.keys(specPart.tracks[0]).join() === Array("mark").join()) {
+        subfig = describeSubfig(specPart, countTracks, rowViews, colViews, savedAttributes, desc, oneTrackInView = false, oneMarkInView = false, onlyDifferenceInMark = true)
+        var mark = new Array(specPart.tracks.length);
+        for (let i = 0; i < specPart.tracks.length; i++) {
+            mark[i] = specPart.tracks[i].mark;
+        }
+        subfig.mark = mark;
 
+    } 
+    // scenario: 2 stacked full specifications
+    // scenario: complicated overlay / other
+    else {
+        subfig = new Object()
+        subfig.number = countTracks
+        subfig.rowNumber = rowViews;
+        subfig.colNumber = colViews;
+        subfig.multiTrackView = {"oneTrackInView": false, "oneMarkInView": null, "onlyDifferenceInMark": false}
+    }
+
+    subfig.nOverlayed = specPart.tracks.length;
     
+    // var temporaryTop = JSON.parse(JSON.stringify(specPart));
+    // delete temporaryTop.tracks;
+    // for (let i = 0; i < subfig.nOverlayed; i++) {
+    //     subfig.layers[i] = new Object();
+    //     Object.obtain(subfig.layers[i], temporaryTop);
+    // }
 
-    // option 1: each overlayed track has its own data
-    // option 2: all from the same data
+    // for top things: iterate
+    // for nTracks: iterate
+    // stacked or overlayed
 
     return subfig
 }

@@ -1,13 +1,13 @@
 function desc2text(desc) {
     // brief alt
-    var textAlt = "Figure created with Gosling"
+    var textAlt = "Genomic visualization created with Gosling"
     if (desc.nTracks > 1) {
         textAlt = textAlt.concat( " showing " + desc.nTracks + " subfigures");
     }
     textAlt = textAlt.concat(". Automatic full description at URL.")
     
     // long description
-    var textLong = "Description: "
+    var textLong = "Description:"
 
     if (typeof desc.title !== 'undefined') {
         textLong = textLong.concat(" Gosling figure with title: '" + desc.title + "'.")
@@ -28,8 +28,7 @@ function desc2text(desc) {
     var description = new Object();
     description.textAlt = textAlt;
     description.textLong = textLong;
-    description.textHTML = "To be made";
-    
+  
     return description;
 }
 
@@ -45,10 +44,11 @@ function oneSubfig(desc, textLong) {
     toReport = {
         "assembly" : hasGenomicAxes,
         "layout" : true,
-        "xDomain" : hasGenomicAxes,
-        "yDomain" : hasGenomicAxes,
+        "xDomain" : hasGenomicAxes & !desc.top.domain.xFullGenome,
+        "yDomain" : hasGenomicAxes & !desc.top.domain.yFullGenome,
         "dataSource" : false,
     }
+    console.log(toReport)
         
     textLong = textLong.concat(" The figure")
     textLong = textLong.concat(addTextSubfig(desc.structure.subfig0, toReport))
@@ -77,7 +77,7 @@ function multipleSubfig(desc, textLong) {
             var subfigPlace = ""
         }
 
-        textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + " " + subfigPlace)
+        textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + subfigPlace)
 
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig], toReport))
         
@@ -113,15 +113,26 @@ function textAllSubfiguresSameValue(desc, textLong) {
     }
 
     if (desc.allSubfiguresSameValue.xDomain) {
-        if (typeof desc.structure.subfig0.xDomain  !== "undefined") {
-            textLong = textLong.concat(" The x-domain shown of all subfigure is chromosome " + desc.structure.subfig0.xDomain.chromosome + " in interval " + desc.structure.subfig0.xDomain.interval);
+        if (typeof desc.structure.subfig0.xDomain !== "undefined") {
+            textLong = textLong.concat(" The x-domain shown of all subfigures is chromosome " + desc.structure.subfig0.xDomain.chromosome)
+            if (typeof desc.structure.subfig0.xDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + desc.structure.subfig0.xDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
+           
         }
         toReport.xDomain = false;
     }
 
     if (desc.allSubfiguresSameValue.yDomain) {
         if (typeof desc.structure.subfig0.yDomain  !== "undefined") {
-            textLong = textLong.concat(" The y-domain shown of all subfigure is chromosome " + desc.structure.subfig0.yDomain.chromosome + " in interval " + desc.structure.subfig0.yDomain.interval);
+            textLong = textLong.concat(" The y-domain shown of all subfigures is chromosome " + desc.structure.subfig0.yDomain.chromosome) 
+            if (typeof desc.structure.subfig0.yDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + desc.structure.subfig0.yDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
         }
         toReport.yDomain = false;
     }
@@ -142,9 +153,9 @@ function determinePlace(subfig, prevFigureToLeft) {
     currColNumber = subfig.colNumber;
     
     if (currRowNumber === 0) {
-        place = "(top row, ";
+        place = " (top row, ";
     } else {
-        place = "(row " + currRowNumber + ", ";
+        place = " (row " + currRowNumber + ", ";
     }
     if (currColNumber === 0) {
         place = place.concat("on the left)");
@@ -161,31 +172,111 @@ function addTextSubfig(subfig, toReport) {
 
     var textSubfig = "";
 
-    if (subfig.overlayed == true) {
-        textSubfig = textSubfig.concat(" is an overlayed plot. Gosling's automatic text generation currently doesn't support overlayed plots.")
-        return textSubfig
-    }
+    //{"oneTrackInView": false, "oneMarkInView": null, "onlyDifferenceInMark": false}
 
-    if (typeof subfig.specialDesc !== "undefined") {
-        textSubfig = textSubfig.concat(" shows a " + subfig.specialDesc + ".")
+    if (!subfig.multiTrackView.oneTrackInView) {
+        if (subfig.multiTrackView.onlyDifferenceInMark) {
+            if (subfig.alignment === "stack") {
+                textSubfig = textSubfig.concat(" is an stacked plot (with " + subfig.nOverlayed + " tracks, only differing in their mark). The shown marks are " + subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1) + ".");
+            } else {
+                textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks, only differing in their mark). The shown marks are " + subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1) + ".");
+            }
+        } else {
+            textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks). Gosling's automatic text generation currently doesn't support overlayed plots.");
+            return textSubfig;
+        }  
     } else {
-        textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
+        if (typeof subfig.specialDesc !== "undefined") {
+            textSubfig = textSubfig.concat(" shows a " + subfig.specialDesc + ".")
+        } else {
+            textSubfig = textSubfig.concat(" shows a plot marked with " + subfig.mark + ".")
+        }
     }
 
     if (toReport.dataSource) {
-        textSubfig = textSubfig.concat(" Data is from source " + subfig.dataSource + ".");
+        textSubfig = textSubfig.concat(" Data is from source " + subfig.data.dataSource + ".");
+    }
+
+    if (typeof subfig.data.binSize !== "undefined") {
+        textSubfig = textSubfig.concat(" Data is binned in intervals of " + subfig.data.binSize + " bp.");
     }
 
     hasGenomicAxes = false;
+
+    alreadyDescribed = [];
+
     for (axis in subfig.axes) {
-        textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + axis + "-axis.")
+        // check if multiple axis have the same data, and if so, describe them together
+        if (!alreadyDescribed.includes(axis)){
+            hasSameField = [axis];
+            for (axis2 in subfig.axes) {
+                if (axis2 !== axis) {
+                    if (subfig.axes[axis].field === subfig.axes[axis2].field && subfig.axes[axis].type === subfig.axes[axis2].type) {
+                        hasSameField = [...hasSameField, axis2];
+                        alreadyDescribed = [...alreadyDescribed, axis2];
+                    }
+                }
+            }
+            if (hasSameField.length > 1) {
+                hasSameFieldText = hasSameField.slice(0, -1).join(", ") + " and " + hasSameField.slice(-1);
+            }
+            else {
+                hasSameFieldText = hasSameField.toString();
+            }
+            textSubfig = textSubfig.concat(" The " + subfig.axes[axis].type + " field '" + subfig.axes[axis].field + "' is shown on the " + hasSameFieldText + "-axis.")
+
+        }
         
-        if (axis === "x" && subfig.axes[axis].type === "genomic" && toReport.xDomain) {
-            textSubfig = textSubfig.concat(" The x-domain shown is ...")
+        axisWithAxis = ["x", "y"]
+        if (axisWithAxis.includes(axis)) {
+            if (typeof subfig.axes[axis].axis === "undefined") {
+                if (axis === "x") {
+                    axisValue = " shown on top side of figure."
+                } else {
+                    axisValue = " shown on left side of figure."
+                }
+            } else {
+                if (subfig.axes[axis].axis === "none") {
+                    axisValue = " not shown."
+                } else {
+                    axisValue = " shown on " + subfig.axes[axis].axis + " side of figure."   
+                } 
+            } 
+            textSubfig = textSubfig.concat(" The " + axis + "-axis is" + axisValue)
         }
 
-        if (axis === "y" && subfig.axes[axis].type === "genomic" && toReport.yDomain) {
-            textSubfig = textSubfig.concat(" The y-domain shown is ...")
+        axisWithLegend = ["row", "size", "text", "color"]
+        if (axisWithLegend.includes(axis)) {
+            if (typeof subfig.axes[axis].legend !== "undefined" && subfig.axes[axis].legend === true) {
+                textSubfig = textSubfig.concat(" Legend for " + axis + " is shown.")
+            }
+        }
+
+        if (axis === "x" && subfig.axes.x.type === "genomic" && toReport.xDomain) {
+            if (typeof subfig.xDomain !== "undefined") {
+                textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome)
+                if (typeof subfig.xDomain.interval !== "undefined") {
+                    textSubfig = textSubfig.concat(" in interval (" + subfig.xDomain.interval + ").");
+                } else {
+                    textSubfig = textSubfig.concat(".");
+                }
+            } else {
+                textSubfig = textSubfig.concat(" Full genome is shown.");
+            }
+           
+        }
+
+        if (axis === "y" && subfig.axes.y.type === "genomic" && toReport.yDomain) {
+            if (typeof subfig.xDomain !== "undefined") {
+                textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome)
+                if (typeof subfig.yDomain.interval !== "undefined") {
+                    textSubfig = textSubfig.concat(" in interval (" + subfig.yDomain.interval + ").");
+                } else {
+                    textSubfig = textSubfig.concat(".");
+                }
+            } else {
+                textSubfig = textSubfig.concat(" Full genome is shown.");
+            }
         }
 
         if (subfig.axes[axis].type === "genomic") {
@@ -200,10 +291,6 @@ function addTextSubfig(subfig, toReport) {
     if (toReport.layout && subfig.layout === "circular") {
         textSubfig = textSubfig.concat(" The genome is displayed in a circular way.");
     }
-
-   
-
-    
 
     return textSubfig
 }
