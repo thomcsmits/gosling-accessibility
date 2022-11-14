@@ -113,14 +113,25 @@ function textAllSubfiguresSameValue(desc, textLong) {
 
     if (desc.allSubfiguresSameValue.xDomain) {
         if (typeof desc.structure.subfig0.xDomain  !== "undefined") {
-            textLong = textLong.concat(" The x-domain shown of all subfigure is chromosome " + desc.structure.subfig0.xDomain.chromosome + " in interval (" + desc.structure.subfig0.xDomain.interval + ").");
+            textLong = textLong.concat(" The x-domain shown of all subfigures is chromosome " + desc.structure.subfig0.xDomain.chromosome)
+            if (typeof desc.structure.subfig0.xDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + desc.structure.subfig0.xDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
+           
         }
         toReport.xDomain = false;
     }
 
     if (desc.allSubfiguresSameValue.yDomain) {
         if (typeof desc.structure.subfig0.yDomain  !== "undefined") {
-            textLong = textLong.concat(" The y-domain shown of all subfigure is chromosome " + desc.structure.subfig0.yDomain.chromosome + " in interval (" + desc.structure.subfig0.yDomain.interval + ").");
+            textLong = textLong.concat(" The y-domain shown of all subfigures is chromosome " + desc.structure.subfig0.yDomain.chromosome) 
+            if (typeof desc.structure.subfig0.yDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + desc.structure.subfig0.yDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
         }
         toReport.yDomain = false;
     }
@@ -161,7 +172,7 @@ function addTextSubfig(subfig, toReport) {
     var textSubfig = "";
 
     if (subfig.overlayed == true) {
-        textSubfig = textSubfig.concat(" is an overlayed plot. Gosling's automatic text generation currently doesn't support overlayed plots.")
+        textSubfig = textSubfig.concat(" is an overlayed plot (with " + subfig.nOverlayed + " tracks). Gosling's automatic text generation currently doesn't support overlayed plots.")
         return textSubfig
     }
 
@@ -231,11 +242,21 @@ function addTextSubfig(subfig, toReport) {
         }
 
         if (axis === "x" && subfig.axes.x.type === "genomic" && toReport.xDomain) {
-            textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome + " in interval (" + subfig.xDomain.interval + ").");
+            textSubfig = textSubfig.concat(" The x-domain shown is chromosome " + subfig.xDomain.chromosome)
+            if (typeof subfig.xDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + subfig.xDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
         }
 
         if (axis === "y" && subfig.axes.y.type === "genomic" && toReport.yDomain) {
-            textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome + " in interval (" + subfig.yDomain.interval + ").");
+            textSubfig = textSubfig.concat(" The y-domain shown is chromosome " + subfig.yDomain.chromosome)
+            if (typeof subfig.yDomain.interval !== "undefined") {
+                textLong = textLong.concat(" in interval (" + subfig.yDomain.interval + ").");
+            } else {
+                textLong = textLong.concat(".");
+            }
         }
 
         if (subfig.axes[axis].type === "genomic") {
