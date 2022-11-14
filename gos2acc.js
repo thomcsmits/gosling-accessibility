@@ -36,7 +36,6 @@ function gos2desc(spec) {
     // data
     desc.data = new Object();
     desc.data.dataSource = new Object();
-    desc.data.categories = new Object();
 
     // layout
     desc.structure = new Object()
@@ -196,7 +195,15 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
     }
 
     if (typeof track.data.categories !== "undefined") {
-        subfig.data.nCategories = track.data.categories.length
+        subfig.data.categories = track.data.categories;
+        subfig.data.nCategories = track.data.categories.length;
+        if (typeof desc.data.categories !== "undefined") {
+            desc.data.categories = track.data.categories
+        } else {
+            if (track.data.categories !== desc.data.categories) {
+                desc.allSubfiguresSameValue.categories = false;
+            }
+        }
     }
 
     if (typeof track.data.binSize !== "undefined") {

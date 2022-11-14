@@ -98,6 +98,7 @@ function textAllSubfiguresSameValue(desc, textLong) {
         "xDomain" : true,
         "yDomain" : true,
         "dataSource" : false,
+        "categories" : false
     }
 
     if (desc.allSubfiguresSameValue.assembly) {
@@ -140,6 +141,15 @@ function textAllSubfiguresSameValue(desc, textLong) {
     if (!desc.allSubfiguresSameValue.dataSource) {
         textLong = textLong.concat(" Not all data is from the same source. Sources are numbered.");
         toReport.dataSource = true;
+    }
+
+    if (desc.data.categories !== "undefined") {
+        if (desc.allSubfiguresSameValue.categories) {
+            textLong = textLong.concat(" There are " + desc.data.categories.length + " categories (samples) displayed: " + desc.data.categories.slice(0, -1).join(", ") + " and " + desc.data.categories.slice(-1) + ".");
+        }
+        else {
+            toReport.categories = true;
+        }
     }
     
     return [textLong, toReport]
@@ -199,6 +209,10 @@ function addTextSubfig(subfig, toReport) {
 
     if (typeof subfig.data.binSize !== "undefined") {
         textSubfig = textSubfig.concat(" Data is binned in intervals of " + subfig.data.binSize + " bp.");
+    }
+
+    if (typeof subfig.data.categories !== "undefined") {
+        textSubfig = textSubfig.concat(" The " + subfig.data.nCategories + " different samples shown are: " + subfig.data.categories.slice(0, -1).join(", ") + " and " + subfig.data.categories.slice(-1) + ".");
     }
 
     hasGenomicAxes = false;
