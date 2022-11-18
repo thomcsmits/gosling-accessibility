@@ -150,10 +150,10 @@ function updateParentalProperties(desc) {
         desc.allSubfiguresSameValue.arrangement = true;
     }
 
-    if (typeof desc.top.domain.xDomain !== "undefined" & desc.allSubfiguresSameValue.xDomain) {
+    if (typeof desc.top.domain.xDomain !== "undefined" | !desc.allSubfiguresSameValue.xDomain) {
         desc.top.domain.xFullGenome = false;
     }
-    if (typeof desc.top.domain.yDomain !== "undefined" & desc.allSubfiguresSameValue.yDomain) {
+    if (typeof desc.top.domain.yDomain !== "undefined" | !desc.allSubfiguresSameValue.yDomain) {
         desc.top.domain.yFullGenome = false;
     }
 }
