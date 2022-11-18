@@ -4,8 +4,14 @@ function desc2text(desc) {
     if (desc.nTracks > 1) {
         textAlt = textAlt.concat( " showing " + desc.nTracks + " subfigures");
     }
-    textAlt = textAlt.concat(". Automatic full description at URL.")
+    textAlt = textAlt.concat(".")
     
+
+    // random location
+    let randomIdentifyer = (Math.random()).toString(36).substring(2,7);
+    var locationLong = "https://gosling.org/this-link-does-not-exist-".concat(randomIdentifyer).concat("/")
+
+
     // long description
     var textLong = "Description:"
 
@@ -27,6 +33,7 @@ function desc2text(desc) {
 
     var description = new Object();
     description.textAlt = textAlt;
+    description.locationLong = locationLong;
     description.textLong = textLong;
   
     return description;
