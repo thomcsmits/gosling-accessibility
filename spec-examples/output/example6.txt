@@ -1,1 +1,1 @@
-Description: Gosling figure with title: 'Circos'. The figure is an overlayed plot (with 3 tracks). Gosling's automatic text generation currently doesn't support overlayed plots.
+Overlayed plot (with 3 tracks) titled 'Circos'.

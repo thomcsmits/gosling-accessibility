@@ -1,1 +1,1 @@
-Description: Gosling figure with title: 'Rule Mark'. The subtitle reads: 'Annotate visualization with horizontal and vertical lines'. The figure is an overlayed plot (with 3 tracks). Gosling's automatic text generation currently doesn't support overlayed plots.
+Overlayed plot (with 3 tracks) titled 'Rule Mark'. The subtitle reads 'Annotate visualization with horizontal and vertical lines'.
