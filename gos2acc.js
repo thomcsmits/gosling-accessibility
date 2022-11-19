@@ -253,9 +253,38 @@ function describeSubfig(track, countTracks, rowViews, colViews, savedAttributes,
         }
     }
 
+    // how to summarise the description: 
+    if (oneMarkInView) {
+        subfig.description = summarisePlot(subfig)
+    }
+    
+
     return subfig
 }
 
+function summarisePlot(subfig) {
+    if (!subfig.multiTrackView.oneTrackInView) {
+        if (subfig.multiTrackView.onlyDifferenceInMark) {
+            if (subfig.alignment === "stack") {
+                textSubfig = "stacked plot (with " + subfig.nOverlayed + " tracks) marked with " +  subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1)
+                return textSubfig;
+            } else {
+                textSubfig = "overlayed plot (with " + subfig.nOverlayed + " tracks) marked with " + subfig.mark.slice(0, -1).join(", ") + " and " + subfig.mark.slice(-1)
+                return textSubfig;
+            }
+        } else {
+            textSubfig = "overlayed plot (with " + subfig.nOverlayed + " tracks)"
+            return textSubfig;
+        }  
+    } else {
+        if (typeof subfig.specialDesc !== "undefined") {
+            return subfig.specialDesc;
+        } else {
+            textSubfig = "plot marked with " + subfig.mark
+            return textSubfig;
+        }
+    }
+}
 
 function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, colViews, savedAttributes, desc) {
 
@@ -290,6 +319,8 @@ function describeSubfigMultipleTracksInView(specPart, countTracks, rowViews, col
     }
 
     subfig.nOverlayed = specPart.tracks.length;
+
+    subfig.description = "overlayed plot (with " + subfig.nOverlayed + " tracks)";
     
     // var temporaryTop = JSON.parse(JSON.stringify(specPart));
     // delete temporaryTop.tracks;
