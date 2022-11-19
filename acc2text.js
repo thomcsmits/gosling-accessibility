@@ -1,6 +1,6 @@
 function desc2text(desc) {
     // brief alt
-    var textAlt = "Genomic visualization created with Gosling"
+    var textAlt = "Genomic visualization"
     if (desc.nTracks > 1) {
         textAlt = textAlt.concat( " showing " + desc.nTracks + " subfigures");
     }
@@ -25,11 +25,13 @@ function desc2text(desc) {
             var textLong = multipleSubfig(desc)
     }
 
+    textAlt = textAlt.concat(" " + textLong.split('.')[0] + ".")
+
     var description = new Object();
     description.textAlt = textAlt;
     description.locationLong = locationLong;
     description.textLong = textLong;
-  
+
     return description;
 }
 
@@ -101,12 +103,12 @@ function twoSubfig(desc) {
                 firstPlace = "outer ring";
                 secondPlace = "inner ring";
             case "horizontal":
-                firstPlace = "top";
-                secondPlace = "bottom";
-                break;
-            default: 
                 firstPlace = "left";
                 secondPlace = "right";
+                break;
+            default: 
+                firstPlace = "top";
+                secondPlace = "bottom";
         }
     } else {
         switch(desc.top.arrangement) {
@@ -115,8 +117,8 @@ function twoSubfig(desc) {
                 secondPlace = "right";
                 break;
             default: 
-                firstPlace = "left";
-                secondPlace = "right";
+                firstPlace = "top";
+                secondPlace = "bottom";
         }
     }
 
@@ -160,13 +162,13 @@ function multipleSubfig(desc) {
             var subfigPlace = ""
         }
 
-        textLong = textLong.concat(" Subfigure " + desc.structure[subfig].number + subfigPlace)
+        textLong = textLong.concat(" Subfigure " + (desc.structure[subfig].number + 1) + subfigPlace)
 
         if (typeof subfig.title !== "undefined") {
             textLong = textLong.concat(", titled '" +  subfig.title + "', ")
         }
 
-        textLong = textLong.concat(":")
+        textLong = textLong.concat(" shows a")
 
         textLong = textLong.concat(addTextSubfig(desc.structure[subfig], toReport))
         
@@ -276,7 +278,7 @@ function addTextSubfig(subfig, toReport) {
     var textSubfig = "";
 
     if (toReport.mark) {
-        textSubfig.concat(subfig.description)
+        textSubfig = textSubfig.concat(" " + subfig.description + ".")
     }
 
     if (!subfig.multiTrackView.oneTrackInView && !subfig.multiTrackView.onlyDifferenceInMark) {
