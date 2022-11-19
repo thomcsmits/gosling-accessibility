@@ -346,8 +346,8 @@ function addTextSubfig(subfig, toReport) {
 
 
 function describeXY(subfig, toReport, textSubfig) {
-    let xValues = ["x", "X-axis", "xDomain", "top"]
-    let yValues = ["y", "Y-axis", "yDomain", "left"]
+    let xValues = ["x", "X-axis", "xDomain", "top", "xe"]
+    let yValues = ["y", "Y-axis", "yDomain", "left", "ye"]
 
     for (axis in subfig.axes) {
         if (axis === "x" | axis === "y") {
@@ -373,7 +373,12 @@ function describeXY(subfig, toReport, textSubfig) {
 
             // if genomic
             if (subfig.axes[values[0]].type === "genomic") {
-                textSubfig = textSubfig.concat(" shows genome") 
+
+                if (Object.keys(subfig.axes).includes(values[4])) {
+                    textSubfig = textSubfig.concat(" shows genomic intervals") 
+                } else {
+                    textSubfig = textSubfig.concat(" shows genomic positions") 
+                }
                 
                 if (toReport.assembly) {
                     textSubfig = textSubfig.concat(" (" + subfig.assembly + ")");

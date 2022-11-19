@@ -1,1 +1,1 @@
-Untitled ideogram. X-axis (top) shows genome (hg38) at chromosome chr1. The nominal field 'Stain' is shown with color.
+Untitled ideogram. X-axis (top) shows genomic intervals (hg38) at chromosome chr1. The nominal field 'Stain' is shown with color.

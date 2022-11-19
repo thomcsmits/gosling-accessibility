@@ -1,1 +1,1 @@
-Bar chart titled 'Basic Marks: bar'. The subtitle reads 'Tutorial Examples'. X-axis (bottom) shows genome (hg38). Y-axis (right) shows the quantitative field 'peak'. Data is binned in intervals of 1280 bp. The only category shown is sample 1.
+Bar chart titled 'Basic Marks: bar'. The subtitle reads 'Tutorial Examples'. X-axis (bottom) shows genomic intervals (hg38). Y-axis (right) shows the quantitative field 'peak'. Data is binned in intervals of 1280 bp. The only category shown is sample 1.

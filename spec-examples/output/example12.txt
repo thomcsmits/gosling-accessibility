@@ -1,1 +1,1 @@
-Two plots (plot marked with undefined and overlayed plot (with 11 tracks)) titled 'Single-cell Epigenomic Analysis'. The subtitle reads 'Corces et al. 2020'. First plot (on the left): X-axis (axis not shown) shows genome (hg38) at chromosome chr3. Second plot (on the right):
+Two plots (plot marked with undefined and overlayed plot (with 11 tracks)) titled 'Single-cell Epigenomic Analysis'. The subtitle reads 'Corces et al. 2020'. First plot (on the left): X-axis (axis not shown) shows genomic intervals (hg38) at chromosome chr3. Second plot (on the right):
