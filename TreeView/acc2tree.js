@@ -20,7 +20,7 @@ function desc2tree(desc) {
     delete tree.allSubfiguresSameValue;
 
     for (subfig in tree.structure) {
-        var temporaryTree = {"Type of chart": tree.structure[subfig].specialDesc, "Type of mark": tree.structure[subfig].mark, Data: tree.structure[subfig].data, Axes: tree.structure[subfig].data, additionalInformation: new Object()}
+        var temporaryTree = {"Type of chart": tree.structure[subfig].specialDesc, "Type of mark": tree.structure[subfig].mark, Data: tree.structure[subfig].data, Axes: tree.structure[subfig].axes, additionalInformation: new Object()}
         temporaryTree.additionalInformation = Object.assign({}, tree.structure[subfig])
         delete temporaryTree.additionalInformation.specialDesc;
         delete temporaryTree.additionalInformation.mark;

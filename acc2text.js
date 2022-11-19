@@ -9,7 +9,7 @@ function desc2text(desc) {
 
     // random location
     let randomIdentifyer = (Math.random()).toString(36).substring(2,7);
-    var locationLong = "https://gosling.org/this-link-does-not-exist-".concat(randomIdentifyer).concat("/")
+    var locationLong = "https://gosling-lang.org/this-link-does-not-exist-".concat(randomIdentifyer).concat("/")
 
 
     // long description
