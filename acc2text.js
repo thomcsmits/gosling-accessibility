@@ -1,11 +1,6 @@
 function desc2text(desc) {
     // brief alt
-    var textAlt = "Genomic visualization"
-    if (desc.nTracks > 1) {
-        textAlt = textAlt.concat( " showing " + desc.nTracks + " subfigures");
-    }
-    textAlt = textAlt.concat(".")
-    
+    var textAlt = "Genomic visualization."
 
     // random location
     let randomIdentifyer = (Math.random()).toString(36).substring(2,7);
@@ -207,7 +202,7 @@ function textAllSubfiguresSameValue(desc, textLong) {
 
     if (desc.allSubfiguresSameValue.xDomain) {
         if (typeof desc.structure.subfig0.xDomain !== "undefined") {
-            textLong = textLong.concat(" The x-domain shown of all subfigures is chromosome " + desc.structure.subfig0.xDomain.chromosome)
+            textLong = textLong.concat(" The x-domain shown of all subfigures is chromosome " + desc.structure.subfig0.xDomain.chromosome.replace('chr', ''));
             if (typeof desc.structure.subfig0.xDomain.interval !== "undefined") {
                 textLong = textLong.concat(" in interval (" + desc.structure.subfig0.xDomain.interval + ").");
             } else {
@@ -312,12 +307,15 @@ function addTextSubfig(subfig, toReport) {
         if (!alreadyDescribed.includes(axis)){
             hasSameField = [axis];
             for (axis2 in subfig.axes) {
-                if (axis2 !== axis) {
-                    if (subfig.axes[axis].field === subfig.axes[axis2].field && subfig.axes[axis].type === subfig.axes[axis2].type) {
-                        hasSameField = [...hasSameField, axis2];
-                        alreadyDescribed = [...alreadyDescribed, axis2];
+                if (!alreadyDescribed.includes(axis2)) {
+                    if (axis2 !== axis) {
+                        if (subfig.axes[axis].field === subfig.axes[axis2].field && subfig.axes[axis].type === subfig.axes[axis2].type) {
+                            hasSameField = [...hasSameField, axis2];
+                            alreadyDescribed = [...alreadyDescribed, axis2];
+                        }
                     }
                 }
+                
             }
             if (hasSameField.length > 1) {
                 hasSameFieldText = hasSameField.slice(0, -1).join(", ") + " and " + hasSameField.slice(-1);
