@@ -130,7 +130,9 @@ export function describeSubfigMultipleTracksInView(specPart, counter, savedAttri
 
     // scenario: only extra specification with multiple tracks is multiple mark types
     if (Object.keys(specPart.tracks[0]).join() === Array("mark").join()) {
-        subfig = describeSubfig(specPart, counter, savedAttributes, desc, oneTrackInView = false, oneMarkInView = false, onlyDifferenceInMark = true)
+
+        subfig = describeSubfig(specPart, counter, savedAttributes, desc,  false,  false, true)
+
         var mark = new Array(specPart.tracks.length);
         for (let i = 0; i < specPart.tracks.length; i++) {
             mark[i] = specPart.tracks[i].mark;
@@ -151,7 +153,7 @@ export function describeSubfigMultipleTracksInView(specPart, counter, savedAttri
     // scenario: 2 stacked full specifications
     // scenario: complicated overlay / other
     else {
-        subfig = new Object()
+        var subfig = new Object()
         subfig.number = counter.countTracks
         subfig.rowNumber = counter.rowViews;
         subfig.colNumber = counter.colViews;

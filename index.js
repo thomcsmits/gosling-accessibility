@@ -7,8 +7,8 @@ const spec = examples.example_1_bar
 const descSpec = gos2desc(spec)
 console.log(descSpec)
 
-//textSpec = acc2text.desc2text(descSpec)
-//console.log(textSpec)
+const textSpec = desc2text(descSpec)
+console.log(textSpec)
 
 
 const updateExampleOutput = false;
