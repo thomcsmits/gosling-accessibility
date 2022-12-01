@@ -1,4 +1,23 @@
-function createTree(desc) {
+export function createFullTree(treeObj) {
+    var tree = createInnerTree(treeObj);
+    
+    var treeRoot = document.getElementById("GoslingFigureTreeView");
+
+    var treeRootList = document.createElement("ul");
+    var treeRootListItem = document.createElement("li");
+    var span = document.createElement("span");
+    span.classList.add('caret');
+    var treeRootListItemText = document.createTextNode("Gosling Figure");
+    span.appendChild(treeRootListItemText);
+    var div = document.createElement("div");
+    div.id = "TreeView";
+
+    div.appendChild(tree);
+    treeRoot.appendChild(ul);
+} 
+
+
+function createInnerTree(desc) {
     var ul = document.createElement("ul");
     ul.classList.add('nested');
 
@@ -26,13 +45,9 @@ function createTree(desc) {
     return ul;
 }
 
-function renderTree(treeObj) {
-    var treeEl = document.getElementById("GoslingFigureTreeView");
-    treeEl.appendChild(createTree(treeObj));
-} 
 
 // As of now, this is only a set-up to be expanded upon, since currently the tree is only collapsible with mouse, and there is no keeping track of what element is selected (and thus not accessible)
-function addToggle() {
+export function addToggle() {
     var elements = document.getElementsByClassName("caret");
     Array.from(elements).forEach(function(element) {
         element.addEventListener("click", function() {
@@ -40,37 +55,4 @@ function addToggle() {
             this.classList.toggle("caret-down");
       })
     })
-}
-
-
-function showInput() {
-    var inputSpec = document.getElementById("inputSpec").value;
-
-    try {
-        var inputSpecJSON = JSON.parse(inputSpec);
-        try {
-            var descSpec = gos2desc(inputSpecJSON);
-            try {
-                var description = desc2text(descSpec);
-            } catch {
-                alert("Error encountered in creating text!")
-            }
-            try {
-                var tree = desc2tree(descSpec);
-            } catch {
-                alert("Eroor encountered in creating tree!")
-            } 
-        } catch {
-            alert("Error encountered in extracting elements!")
-        }
-    } catch{
-        alert("Input is not in JSON format!")
-    }
-
-    document.getElementById('displayTextAlt').innerHTML = description.textAlt;
-    document.getElementById('displayTextLong').innerHTML = description.textLong;
-
-    renderTree(tree)
-
-    addToggle()
 }
