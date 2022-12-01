@@ -1,14 +1,14 @@
-const specsSurvey = require("./spec-examples/specs/specs-survey")
-const gos2acc = require("./gos2acc")
-const acc2text = require("./acc2text")
+import { examples } from "./spec-examples/specs/specs-survey.js";
+import { gos2desc } from "./src/gos2desc/index.js";
+import { desc2text } from "./src/desc2text/index.js";
 
-const spec = specsSurvey.example_1_bar
+const spec = examples.example_1_bar
 
-descSpec = gos2acc.gos2desc(spec)
+const descSpec = gos2desc(spec)
 console.log(descSpec)
 
-textSpec = acc2text.desc2text(descSpec)
-console.log(textSpec)
+//textSpec = acc2text.desc2text(descSpec)
+//console.log(textSpec)
 
 
 const updateExampleOutput = false;

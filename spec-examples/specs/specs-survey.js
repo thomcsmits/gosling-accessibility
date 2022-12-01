@@ -1,4 +1,4 @@
-module.exports = {
+export const examples = {
   example_1_bar: {
     "title": "Basic Marks: bar",
     "subtitle": "Tutorial Examples",
