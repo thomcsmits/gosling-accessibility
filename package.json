@@ -1,5 +1,6 @@
 {
   "name": "gosling-accessibility",
+  "type": "module",
   "version": "1.0.0",
   "description": "Improving accessibility in Gosling by generating automatic textual descriptions",
   "main": "index.js",
