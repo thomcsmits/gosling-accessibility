@@ -129,12 +129,14 @@ function determinePlaceMultiple(subfig, prevFigureToLeft) {
     if (currRowNumber === 0) {
         place = " (top row, ";
     } else {
-        place = " (row " + currRowNumber + ", ";
+        const currRowNumberPlus1 = currRowNumber + 1
+        place = " (row " + currRowNumberPlus1 + ", ";
     }
     if (currColNumber === 0) {
         place = place.concat("on the left)");
     } else {
-        place = place.concat("on the right of subfigure " + prevFigureToLeft + ")");
+        const prevFigureToLeftPlus1 = prevFigureToLeft + 1
+        place = place.concat("on the right of subfigure " + prevFigureToLeftPlus1 + ")");
         prevFigureToLeft = currFigure;
     }
     return [place, prevFigureToLeft];
